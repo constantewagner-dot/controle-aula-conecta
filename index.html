@@ -12,103 +12,7 @@
       min-height: 100vh;
     }
 
-    /* ============ TELAS DE LOGIN / SETUP ============ */
-    .screen {
-      display: none;
-      min-height: 100vh;
-    }
-    .screen.active { display: flex; }
-
-    .auth-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background: linear-gradient(135deg, #e8f0fe 0%, #f0f2f5 30%, #fff3e0 70%, #e8f5e9 100%);
-    }
-
-    .auth-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 40px 36px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .auth-brand {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-    .auth-brand .icon-brand {
-      font-size: 3rem;
-      margin-bottom: 8px;
-    }
-    .auth-brand h1 {
-      font-size: 1.3rem;
-      color: #1a73e8;
-      margin-bottom: 4px;
-    }
-    .auth-brand p {
-      font-size: 0.88rem;
-      color: #999;
-    }
-
-    .auth-card label {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 5px;
-    }
-    .auth-card input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #d0d0d0;
-      border-radius: 6px;
-      font-size: 0.94rem;
-      outline: none;
-      background: #fafafa;
-      margin-bottom: 14px;
-      transition: border 0.2s;
-    }
-    .auth-card input:focus {
-      border-color: #1a73e8;
-      background: #fff;
-    }
-
-    .auth-card .btn-full {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-top: 6px;
-      transition: all 0.2s;
-    }
-
-    .auth-alert {
-      display: none;
-      padding: 10px 14px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      margin-bottom: 14px;
-    }
-    .auth-alert.show { display: block; }
-    .auth-alert.error { background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb; }
-    .auth-alert.success { background: #e6f4ea; color: #1e7e34; border: 1px solid #b7dfbf; }
-
-    .auth-footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.84rem;
-      color: #999;
-    }
-
-    /* ============ APP HEADER & TABS ============ */
+    /* ============ HEADER ============ */
     .app-header {
       background: #1a73e8;
       color: white;
@@ -117,41 +21,40 @@
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
     .app-header h1 { font-size: 1.3rem; }
-    .app-header .header-right {
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       font-size: 0.88rem;
+      flex-wrap: wrap;
     }
-    .header-right .user-info {
+    .btn-sync {
       display: flex;
       align-items: center;
       gap: 8px;
-      opacity: 0.95;
-    }
-    .header-right .user-role {
-      font-size: 0.72rem;
-      background: rgba(255,255,255,0.2);
-      padding: 2px 8px;
-      border-radius: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .btn-logout {
       background: rgba(255,255,255,0.18);
       color: #fff;
       border: 1px solid rgba(255,255,255,0.3);
       padding: 6px 14px;
-      border-radius: 6px;
+      border-radius: 20px;
       cursor: pointer;
       font-size: 0.84rem;
       transition: all 0.2s;
     }
-    .btn-logout:hover { background: rgba(255,255,255,0.3); }
+    .btn-sync:hover { background: rgba(255,255,255,0.3); }
+    .sync-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: #b0bec5;
+      flex-shrink: 0;
+    }
+    .sync-dot.connected { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
+    .sync-dot.error { background: #ff5252; }
 
+    /* ============ TABS ============ */
     .tabs {
       display: flex;
       background: #fff;
@@ -174,6 +77,8 @@
     .tab-btn:hover { color: #1a73e8; }
     .tab-btn.admin { color: #e67e00; }
     .tab-btn.admin.active { color: #e67e00; border-bottom-color: #e67e00; }
+    .tab-btn.config { color: #6a1b9a; }
+    .tab-btn.config.active { color: #6a1b9a; border-bottom-color: #6a1b9a; }
 
     .tab-content { display: none; padding: 32px; max-width: 1200px; margin: 0 auto; }
     .tab-content.active { display: block; }
@@ -187,12 +92,14 @@
       margin-bottom: 24px;
     }
     .card h2 { font-size: 1.1rem; color: #1a73e8; margin-bottom: 20px; }
+    .card h2.purple { color: #6a1b9a; }
+    .card h2.orange { color: #e67e00; }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
     .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
 
-    label:not(.auth-card label) {
+    label {
       display: block;
       font-size: 0.82rem;
       font-weight: 600;
@@ -211,6 +118,7 @@
     }
     input:focus, select:focus, textarea:focus { border-color: #1a73e8; background: #fff; }
     textarea { resize: vertical; min-height: 80px; }
+    .input-mono { font-family: 'Consolas', 'Monaco', monospace; font-size: 0.85rem; }
 
     /* ============ BUTTONS ============ */
     .btn {
@@ -234,16 +142,12 @@
     .btn-warning:hover { background: #e0a800; }
     .btn-orange    { background: #e67e00; color: #fff; }
     .btn-orange:hover { background: #b86200; }
+    .btn-purple    { background: #8e24aa; color: #fff; }
+    .btn-purple:hover { background: #6a1b9a; }
     .btn-sm { padding: 6px 12px; font-size: 0.80rem; }
     .btn-xs { padding: 3px 8px; font-size: 0.74rem; border-radius: 4px; }
 
-    .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-
-    .btn-disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
+    .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; align-items: center; }
 
     /* ============ ALERTS ============ */
     .alert {
@@ -257,6 +161,7 @@
     .alert-success { background: #e6f4ea; color: #1e7e34; border: 1px solid #b7dfbf; }
     .alert-error   { background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb; }
     .alert-warning { background: #fff8e1; color: #856404; border: 1px solid #ffe082; }
+    .alert-info    { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
 
     /* ============ FILTERS & TABLE ============ */
     .filters { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
@@ -268,10 +173,9 @@
     td { padding: 9px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
     .td-actions { display: flex; gap: 6px; }
 
-    /* ============ EMPTY STATE ============ */
     .empty-state { text-align: center; padding: 40px; color: #bbb; }
 
-    /* ============ MODALS ============ */
+    /* ============ MODAL ============ */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -302,11 +206,7 @@
     .stat-card .lbl { font-size: 0.78rem; color: #888; margin-top: 4px; }
 
     /* ============ ADMIN COLUMNS ============ */
-    .adm-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
+    .adm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
     .adm-col {
       background: #fff;
       border-radius: 12px;
@@ -376,7 +276,6 @@
     .adm-item-del:hover { background: #fdecea; color: #ea4335; }
     .adm-empty { text-align: center; padding: 24px 12px; color: #bbb; font-size: 0.83rem; }
 
-    /* Cores por coluna */
     .col-prof  .adm-col-header { background: #e8f5e9; border-color: #c8e6c9; }
     .col-prof  .adm-col-header .icon { background: #c8e6c9; }
     .col-prof  .adm-col-header .col-count { background: #c8e6c9; color: #2e7d32; }
@@ -409,45 +308,23 @@
     .col-jornada .adm-item { background: #fdf6ff; border: 1px solid #e1bee7; }
     .col-jornada .adm-item:hover { background: #f3e5f5; }
 
-    /* ============ USERS TABLE ============ */
-    .users-table thead th { background: #5c6bc0; }
-    .badge {
+    /* ============ SETTINGS / GITHUB ============ */
+    .github-badge {
       display: inline-block;
-      padding: 3px 10px;
+      padding: 4px 10px;
       border-radius: 12px;
       font-size: 0.74rem;
       font-weight: 600;
+      margin-left: 8px;
+      vertical-align: middle;
     }
-    .badge-admin { background: #e8eaf6; color: #3f51b5; }
-    .badge-user  { background: #e0e0e0; color: #666; }
-    .badge-active   { background: #e6f4ea; color: #1e7e34; }
-    .badge-inactive { background: #fdecea; color: #b71c1c; }
+    .badge-connected { background: #e6f4ea; color: #1e7e34; }
+    .badge-disconnected { background: #e0e0e0; color: #666; }
+    .badge-error { background: #fdecea; color: #b71c1c; }
 
-    .tooltip-wrap {
-      position: relative;
-      display: inline-block;
-    }
-    .tooltip-wrap .tooltip-text {
-      visibility: hidden;
-      opacity: 0;
-      background: #333;
-      color: #fff;
-      font-size: 0.72rem;
-      padding: 4px 8px;
-      border-radius: 4px;
-      position: absolute;
-      bottom: 120%;
-      left: 50%;
-      transform: translateX(-50%);
-      white-space: nowrap;
-      transition: opacity 0.2s;
-      pointer-events: none;
-      z-index: 10;
-    }
-    .tooltip-wrap:hover .tooltip-text {
-      visibility: visible;
-      opacity: 1;
-    }
+    .divider { border: none; border-top: 1px solid #eee; margin: 24px 0; }
+    .hint { font-size: 0.82rem; color: #999; margin-top: 6px; line-height: 1.5; }
+    .mono { font-family: 'Consolas','Monaco',monospace; background: #f5f5f5; padding: 1px 5px; border-radius: 4px; font-size: 0.82rem; }
 
     /* ============ RESPONSIVE ============ */
     @media (max-width: 900px) {
@@ -465,289 +342,295 @@
 </head>
 <body>
 
-<!-- ==================== TELA 1: SETUP (primeiro acesso) ==================== -->
-<div id="screen-setup" class="screen">
-  <div class="auth-wrapper">
-    <div class="auth-card">
-      <div class="auth-brand">
-        <div class="icon-brand">📚</div>
-        <h1>Controle de Aula – Conecta</h1>
-        <p>Configure sua conta de administrador</p>
+<!-- ==================== HEADER ==================== -->
+<header class="app-header">
+  <h1>📚 Controle de Aula – Conecta</h1>
+  <div class="header-right">
+    <button class="btn-sync" onclick="irParaConfiguracoes()" title="Ir para configurações de conexão">
+      <span class="sync-dot" id="sync-dot"></span>
+      <span id="sync-label">Não conectado</span>
+    </button>
+    <span id="datetime"></span>
+  </div>
+</header>
+
+<!-- ==================== TABS ==================== -->
+<div class="tabs">
+  <button class="tab-btn active" data-tab="lancar"     onclick="switchTab('lancar')">➕ Lançar Aula</button>
+  <button class="tab-btn"        data-tab="consultar"  onclick="switchTab('consultar')">🔎 Consultar / Editar</button>
+  <button class="tab-btn admin"  data-tab="admin"      onclick="switchTab('admin')">⚙️ Administração</button>
+  <button class="tab-btn config" data-tab="config"     onclick="switchTab('config')">🔧 Configurações</button>
+</div>
+
+<!-- ============ TAB 1: LANÇAR ============ -->
+<div id="tab-lancar" class="tab-content active">
+  <div class="card">
+    <h2>➕ Novo Lançamento</h2>
+    <div id="alert-lancar" class="alert"></div>
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div>
+        <label>Professor *</label>
+        <select id="f-professor"><option value="">Selecione...</option></select>
       </div>
-      <div id="alert-setup" class="auth-alert"></div>
-      <label>Nome completo</label>
-      <input id="setup-nome" type="text" placeholder="Seu nome completo" autocomplete="name"/>
-      <label>Nome de usuário</label>
-      <input id="setup-user" type="text" placeholder="Usuário para login" autocomplete="off"/>
-      <label>Senha</label>
-      <input id="setup-senha" type="password" placeholder="Mínimo 4 caracteres" autocomplete="new-password"/>
-      <label>Confirmar senha</label>
-      <input id="setup-senha2" type="password" placeholder="Repita a senha" autocomplete="new-password"/>
-      <button class="btn btn-primary btn-full" onclick="criarAdmin()">🔐 Criar conta e acessar</button>
+      <div>
+        <label>Turma *</label>
+        <select id="f-turma"><option value="">Selecione...</option></select>
+      </div>
+      <div>
+        <label>Jornada do Conecta *</label>
+        <select id="f-jornada"><option value="">Selecione...</option></select>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div>
+        <label>Jogo Aplicado *</label>
+        <select id="f-jogo"><option value="">Selecione...</option></select>
+      </div>
+      <div>
+        <label>Data *</label>
+        <input id="f-data" type="date"/>
+      </div>
+      <div>
+        <label>Hora *</label>
+        <input id="f-hora" type="time"/>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Atividade Executada *</label>
+      <textarea id="f-atividade" placeholder="Descreva objetivo, passo a passo breve e como foi conduzida."></textarea>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Comentários do Professor (opcional)</label>
+      <textarea id="f-comentarios" placeholder="Observações, engajamento, dificuldades, devolutivas, próximos passos..."></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="salvarAula()">💾 Salvar Lançamento</button>
+      <button class="btn btn-secondary" onclick="limparForm()">🗑️ Limpar</button>
     </div>
   </div>
 </div>
 
-<!-- ==================== TELA 2: LOGIN ==================== -->
-<div id="screen-login" class="screen">
-  <div class="auth-wrapper">
-    <div class="auth-card">
-      <div class="auth-brand">
-        <div class="icon-brand">📚</div>
-        <h1>Controle de Aula – Conecta</h1>
-        <p>Faça login para continuar</p>
+<!-- ============ TAB 2: CONSULTAR ============ -->
+<div id="tab-consultar" class="tab-content">
+  <div class="stats" id="stats-area"></div>
+  <div class="card">
+    <h2>🔎 Filtros</h2>
+    <div class="filters">
+      <div>
+        <label>Professor</label>
+        <select id="fil-professor"><option value="">Todos</option></select>
       </div>
-      <div id="alert-login" class="auth-alert"></div>
-      <label>Usuário</label>
-      <input id="login-user" type="text" placeholder="Seu nome de usuário" autocomplete="username"/>
-      <label>Senha</label>
-      <input id="login-senha" type="password" placeholder="Sua senha" autocomplete="current-password"/>
-      <button class="btn btn-primary btn-full" onclick="fazerLogin()">🔑 Entrar</button>
+      <div>
+        <label>Turma</label>
+        <select id="fil-turma"><option value="">Todas</option></select>
+      </div>
+      <div>
+        <label>Jornada do Conecta</label>
+        <select id="fil-jornada"><option value="">Todas</option></select>
+      </div>
+      <div>
+        <label>Jogo Aplicado</label>
+        <select id="fil-jogo"><option value="">Todos</option></select>
+      </div>
+      <div>
+        <label>Data início</label>
+        <input id="fil-data-ini" type="date"/>
+      </div>
+      <div>
+        <label>Data fim</label>
+        <input id="fil-data-fim" type="date"/>
+      </div>
+      <div>
+        <label>Busca livre</label>
+        <input id="fil-texto" type="text" placeholder="Atividade, comentários..."/>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="renderTabela()">🔍 Filtrar</button>
+      <button class="btn btn-secondary" onclick="limparFiltros()">✖ Limpar filtros</button>
+      <button class="btn btn-success" onclick="exportarCSV()">📥 Exportar CSV</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>📋 Registros</h2>
+    <div id="tabela-area"></div>
+  </div>
+</div>
+
+<!-- ============ TAB 3: ADMINISTRAÇÃO ============ -->
+<div id="tab-admin" class="tab-content">
+  <div style="margin-bottom:20px;">
+    <h2 style="font-size:1.15rem; color:#e67e00; margin-bottom:4px;">⚙️ Administração</h2>
+    <p style="color:#999; font-size:0.87rem;">Gerencie os itens disponíveis nos campos de seleção do formulário.</p>
+  </div>
+
+  <div class="adm-grid">
+    <!-- Professores -->
+    <div class="adm-col col-prof">
+      <div class="adm-col-header">
+        <div class="icon">👤</div>
+        <span class="col-title">Professores</span>
+        <span class="col-count" id="count-professores">0</span>
+      </div>
+      <div class="adm-col-body">
+        <div class="adm-input-row">
+          <input id="adm-professor-nome" type="text" placeholder="Nome do professor…"/>
+          <button onclick="adicionarItem('professores','adm-professor-nome')" title="Adicionar">+</button>
+        </div>
+        <div id="alert-adm-professores" class="alert"></div>
+        <div class="adm-list" id="list-professores"></div>
+      </div>
+    </div>
+    <!-- Turmas -->
+    <div class="adm-col col-turma">
+      <div class="adm-col-header">
+        <div class="icon">🏫</div>
+        <span class="col-title">Turmas</span>
+        <span class="col-count" id="count-turmas">0</span>
+      </div>
+      <div class="adm-col-body">
+        <div class="adm-input-row">
+          <input id="adm-turma-nome" type="text" placeholder="Nome da turma…"/>
+          <button onclick="adicionarItem('turmas','adm-turma-nome')" title="Adicionar">+</button>
+        </div>
+        <div id="alert-adm-turmas" class="alert"></div>
+        <div class="adm-list" id="list-turmas"></div>
+      </div>
+    </div>
+    <!-- Jogos -->
+    <div class="adm-col col-jogo">
+      <div class="adm-col-header">
+        <div class="icon">🎲</div>
+        <span class="col-title">Jogos Aplicados</span>
+        <span class="col-count" id="count-jogos">0</span>
+      </div>
+      <div class="adm-col-body">
+        <div class="adm-input-row">
+          <input id="adm-jogo-nome" type="text" placeholder="Nome do jogo…"/>
+          <button onclick="adicionarItem('jogos','adm-jogo-nome')" title="Adicionar">+</button>
+        </div>
+        <div id="alert-adm-jogos" class="alert"></div>
+        <div class="adm-list" id="list-jogos"></div>
+      </div>
+    </div>
+    <!-- Jornadas -->
+    <div class="adm-col col-jornada">
+      <div class="adm-col-header">
+        <div class="icon">🗺️</div>
+        <span class="col-title">Jornadas do Conecta</span>
+        <span class="col-count" id="count-jornadas">0</span>
+      </div>
+      <div class="adm-col-body">
+        <div class="adm-input-row">
+          <input id="adm-jornada-nome" type="text" placeholder="Nome da jornada…"/>
+          <button onclick="adicionarItem('jornadas','adm-jornada-nome')" title="Adicionar">+</button>
+        </div>
+        <div id="alert-adm-jornadas" class="alert"></div>
+        <div class="adm-list" id="list-jornadas"></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ==================== TELA 3: APLICATIVO ==================== -->
-<div id="screen-app" class="screen" style="display:block; flex-direction:column;">
+<!-- ============ TAB 4: CONFIGURAÇÕES ============ -->
+<div id="tab-config" class="tab-content">
 
-  <header class="app-header">
-    <h1>📚 Controle de Aula – Conecta</h1>
-    <div class="header-right">
-      <div class="user-info">
-        <span>👤 <strong id="header-nome"></strong></span>
-        <span class="user-role" id="header-role"></span>
+  <!-- CONEXÃO COM GITHUB -->
+  <div class="card">
+    <h2 class="purple">🔗 Conexão com GitHub
+      <span id="github-status-badge" class="github-badge badge-disconnected">Não configurado</span>
+    </h2>
+    <p style="color:#888; font-size:0.87rem; margin-bottom:20px;">
+      Configure o repositório onde o arquivo de dados ficará armazenado.
+      Após preencher, use <strong>Testar conexão</strong> para validar e depois <strong>Salvar</strong>.
+    </p>
+
+    <div class="grid-2">
+      <div>
+        <label>Token de acesso (Personal Access Token)</label>
+        <input id="git-token" type="password" class="input-mono" placeholder="ghp_..." autocomplete="off"/>
+        <div class="hint">Token com permissão de leitura/escrita no repositório (scope <span class="mono">repo</span>).</div>
       </div>
-      <span id="datetime"></span>
-      <button class="btn-logout" onclick="logout()">🚪 Sair</button>
+      <div>
+        <label>Caminho do arquivo de dados</label>
+        <input id="git-path" type="text" class="input-mono" placeholder="data/conecta_aulas.json"/>
+        <div class="hint">Caminho dentro do repositório onde o JSON será salvo.</div>
+      </div>
     </div>
-  </header>
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('lancar',this)">➕ Lançar Aula</button>
-    <button class="tab-btn"        onclick="switchTab('consultar',this)">🔎 Consultar / Editar</button>
-    <button class="tab-btn"        onclick="switchTab('backup',this)">💾 Backup</button>
-    <button class="tab-btn admin"  onclick="switchTab('admin',this)">⚙️ Administração</button>
+    <div class="grid-3" style="margin-top:16px;">
+      <div>
+        <label>Owner (usuário ou organização)</label>
+        <input id="git-owner" type="text" class="input-mono" placeholder="seu-usuario"/>
+      </div>
+      <div>
+        <label>Repositório</label>
+        <input id="git-repo" type="text" class="input-mono" placeholder="conecta-aulas"/>
+      </div>
+      <div>
+        <label>Branch</label>
+        <input id="git-branch" type="text" class="input-mono" placeholder="main"/>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="testarConexao()">🧪 Testar conexão</button>
+      <button class="btn btn-purple" onclick="salvarConfiguracao()">💾 Salvar configuração</button>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin:0 0 0 12px; font-size:0.86rem;">
+        <input type="checkbox" id="git-autosync" style="width:auto; margin:0;"/>
+        Sincronizar automaticamente ao salvar
+      </label>
+    </div>
+    <div id="alert-git" class="alert"></div>
   </div>
 
-  <!-- ============ TAB 1: LANÇAR ============ -->
-  <div id="tab-lancar" class="tab-content active">
-    <div class="card">
-      <h2>➕ Novo Lançamento</h2>
-      <div id="alert-lancar" class="alert"></div>
-      <div class="grid-3" style="margin-bottom:16px;">
-        <div>
-          <label>Professor *</label>
-          <select id="f-professor"><option value="">Selecione...</option></select>
-        </div>
-        <div>
-          <label>Turma *</label>
-          <select id="f-turma"><option value="">Selecione...</option></select>
-        </div>
-        <div>
-          <label>Jornada do Conecta *</label>
-          <select id="f-jornada"><option value="">Selecione...</option></select>
-        </div>
+  <!-- SINCRONIZAÇÃO -->
+  <div class="card">
+    <h2 class="purple">🔄 Sincronização de Dados</h2>
+    <p style="color:#888; font-size:0.87rem; margin-bottom:20px;">
+      Sincronize os dados locais com o arquivo armazenado no GitHub.
+    </p>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:0.95rem; margin-bottom:10px;">⬇️ Baixar do GitHub</h3>
+        <p style="font-size:0.84rem; color:#666; margin-bottom:14px;">
+          Busca o arquivo remoto e <strong>substitui</strong> os dados locais.
+        </p>
+        <button class="btn btn-primary" onclick="baixarDados()">⬇️ Baixar dados</button>
       </div>
-      <div class="grid-3" style="margin-bottom:16px;">
-        <div>
-          <label>Jogo Aplicado *</label>
-          <select id="f-jogo"><option value="">Selecione...</option></select>
-        </div>
-        <div>
-          <label>Data *</label>
-          <input id="f-data" type="date"/>
-        </div>
-        <div>
-          <label>Hora *</label>
-          <input id="f-hora" type="time"/>
-        </div>
-      </div>
-      <div style="margin-bottom:16px;">
-        <label>Atividade Executada *</label>
-        <textarea id="f-atividade" placeholder="Descreva objetivo, passo a passo breve e como foi conduzida."></textarea>
-      </div>
-      <div style="margin-bottom:16px;">
-        <label>Comentários do Professor (opcional)</label>
-        <textarea id="f-comentarios" placeholder="Observações, engajamento, dificuldades, devolutivas, próximos passos..."></textarea>
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="salvarAula()">💾 Salvar Lançamento</button>
-        <button class="btn btn-secondary" onclick="limparForm()">🗑️ Limpar</button>
+      <div>
+        <h3 style="font-size:0.95rem; margin-bottom:10px;">⬆️ Enviar para o GitHub</h3>
+        <p style="font-size:0.84rem; color:#666; margin-bottom:14px;">
+          Envia os dados locais para o arquivo remoto (cria/atualiza).
+        </p>
+        <button class="btn btn-success" onclick="enviarDados()">⬆️ Enviar dados</button>
       </div>
     </div>
+    <div id="alert-sync" class="alert" style="margin-top:16px;"></div>
+    <p id="ultima-sync" style="font-size:0.82rem; color:#999; margin-top:14px;">Última sincronização: —</p>
   </div>
 
-  <!-- ============ TAB 2: CONSULTAR ============ -->
-  <div id="tab-consultar" class="tab-content">
-    <div class="stats" id="stats-area"></div>
-    <div class="card">
-      <h2>🔎 Filtros</h2>
-      <div class="filters">
-        <div>
-          <label>Professor</label>
-          <select id="fil-professor"><option value="">Todos</option></select>
-        </div>
-        <div>
-          <label>Turma</label>
-          <select id="fil-turma"><option value="">Todas</option></select>
-        </div>
-        <div>
-          <label>Jornada do Conecta</label>
-          <select id="fil-jornada"><option value="">Todas</option></select>
-        </div>
-        <div>
-          <label>Jogo Aplicado</label>
-          <select id="fil-jogo"><option value="">Todos</option></select>
-        </div>
-        <div>
-          <label>Data início</label>
-          <input id="fil-data-ini" type="date"/>
-        </div>
-        <div>
-          <label>Data fim</label>
-          <input id="fil-data-fim" type="date"/>
-        </div>
-        <div>
-          <label>Busca livre</label>
-          <input id="fil-texto" type="text" placeholder="Atividade, comentários..."/>
-        </div>
+  <!-- BACKUP LOCAL -->
+  <div class="card">
+    <h2 class="purple">💾 Backup Local</h2>
+    <div class="grid-2">
+      <div>
+        <h3 style="font-size:0.95rem; margin-bottom:10px;">📤 Exportar Backup</h3>
+        <p style="font-size:0.84rem; color:#666; margin-bottom:14px;">Baixa todos os dados em um arquivo <span class="mono">.json</span>.</p>
+        <button class="btn btn-primary" onclick="exportarJSON()">⬇️ Baixar backup.json</button>
       </div>
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="renderTabela()">🔍 Filtrar</button>
-        <button class="btn btn-secondary" onclick="limparFiltros()">✖ Limpar filtros</button>
-        <button class="btn btn-success" onclick="exportarCSV()">📥 Exportar CSV</button>
+      <div>
+        <h3 style="font-size:0.95rem; margin-bottom:10px;">📥 Importar / Restaurar</h3>
+        <p style="font-size:0.84rem; color:#666; margin-bottom:10px;">Carrega um <span class="mono">.json</span> exportado.</p>
+        <input type="file" id="import-file" accept=".json" style="margin-bottom:10px;"/>
+        <button class="btn btn-success" onclick="importarJSON()">⬆️ Restaurar backup</button>
+        <div id="alert-backup" class="alert"></div>
       </div>
     </div>
-    <div class="card">
-      <h2>📋 Registros</h2>
-      <div id="tabela-area"></div>
-    </div>
-  </div>
-
-  <!-- ============ TAB 3: BACKUP ============ -->
-  <div id="tab-backup" class="tab-content">
-    <div class="card">
-      <h2>💾 Backup e Restauração de Dados</h2>
-      <p style="color:#666; margin-bottom:24px; font-size:0.93rem;">
-        Os dados ficam salvos no <strong>localStorage</strong> do navegador.
-        O backup inclui lançamentos, cadastros e usuários.
-      </p>
-      <div class="grid-2">
-        <div>
-          <h3 style="font-size:0.95rem; margin-bottom:10px;">📤 Exportar Backup</h3>
-          <p style="font-size:0.85rem; color:#666; margin-bottom:14px;">Baixa tudo em um arquivo <code>.json</code>.</p>
-          <button class="btn btn-primary" onclick="exportarJSON()">⬇️ Baixar backup.json</button>
-        </div>
-        <div>
-          <h3 style="font-size:0.95rem; margin-bottom:10px;">📥 Importar / Restaurar</h3>
-          <p style="font-size:0.85rem; color:#666; margin-bottom:10px;">Carrega um <code>.json</code> exportado anteriormente.</p>
-          <input type="file" id="import-file" accept=".json" style="margin-bottom:10px;"/>
-          <button class="btn btn-success" onclick="importarJSON()">⬆️ Restaurar backup</button>
-          <div id="alert-backup" class="alert"></div>
-        </div>
-      </div>
-      <hr style="margin:24px 0; border:none; border-top:1px solid #eee;"/>
-      <h3 style="font-size:0.95rem; margin-bottom:10px; color:#ea4335;">⚠️ Zona de perigo</h3>
-      <p style="font-size:0.85rem; color:#666; margin-bottom:14px;">Apaga <strong>todos</strong> os registros, cadastros e usuários permanentemente.</p>
-      <button class="btn btn-danger" onclick="confirmarLimpar()">🗑️ Apagar todos os dados</button>
-    </div>
-  </div>
-
-  <!-- ============ TAB 4: ADMINISTRAÇÃO ============ -->
-  <div id="tab-admin" class="tab-content">
-    <div style="margin-bottom:20px;">
-      <h2 style="font-size:1.15rem; color:#e67e00; margin-bottom:4px;">⚙️ Administração</h2>
-      <p style="color:#999; font-size:0.87rem;">Gerencie os itens disponíveis nos campos de seleção do formulário.</p>
-    </div>
-
-    <!-- USUÁRIOS (apenas admin) -->
-    <div id="admin-users-section" class="card" style="display:none;">
-      <h2 style="color:#5c6bc0;">👥 Gerenciar Usuários</h2>
-      <p style="font-size:0.82rem; color:#888; margin-bottom:16px;">
-        Usuários inativos não conseguem fazer login. Apenas administradores podem gerenciar usuários.
-      </p>
-      <div class="btn-row" style="margin-top:0; margin-bottom:16px;">
-        <button class="btn btn-primary" onclick="abrirModalUser()" style="background:#5c6bc0;">➕ Novo Usuário</button>
-      </div>
-      <div id="alert-adm-users" class="alert"></div>
-      <table class="users-table" style="margin-top:12px;">
-        <thead>
-          <tr>
-            <th>Nome</th><th>Usuário</th><th>Função</th><th>Status</th><th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="users-tbody"></tbody>
-      </table>
-      <div id="users-empty" class="empty-state" style="display:none;"><div style="font-size:2.5rem;">👤</div><p>Nenhum usuário cadastrado.</p></div>
-    </div>
-
-    <!-- COLUNAS DE CADASTRO -->
-    <div class="adm-grid">
-      <!-- Professores -->
-      <div class="adm-col col-prof">
-        <div class="adm-col-header">
-          <div class="icon">👤</div>
-          <span class="col-title">Professores</span>
-          <span class="col-count" id="count-professores">0</span>
-        </div>
-        <div class="adm-col-body">
-          <div class="adm-input-row">
-            <input id="adm-professor-nome" type="text" placeholder="Nome do professor…"/>
-            <button onclick="adicionarItem('professores','adm-professor-nome')" title="Adicionar">+</button>
-          </div>
-          <div id="alert-adm-professores" class="alert"></div>
-          <div class="adm-list" id="list-professores"></div>
-        </div>
-      </div>
-      <!-- Turmas -->
-      <div class="adm-col col-turma">
-        <div class="adm-col-header">
-          <div class="icon">🏫</div>
-          <span class="col-title">Turmas</span>
-          <span class="col-count" id="count-turmas">0</span>
-        </div>
-        <div class="adm-col-body">
-          <div class="adm-input-row">
-            <input id="adm-turma-nome" type="text" placeholder="Nome da turma…"/>
-            <button onclick="adicionarItem('turmas','adm-turma-nome')" title="Adicionar">+</button>
-          </div>
-          <div id="alert-adm-turmas" class="alert"></div>
-          <div class="adm-list" id="list-turmas"></div>
-        </div>
-      </div>
-      <!-- Jogos -->
-      <div class="adm-col col-jogo">
-        <div class="adm-col-header">
-          <div class="icon">🎲</div>
-          <span class="col-title">Jogos Aplicados</span>
-          <span class="col-count" id="count-jogos">0</span>
-        </div>
-        <div class="adm-col-body">
-          <div class="adm-input-row">
-            <input id="adm-jogo-nome" type="text" placeholder="Nome do jogo…"/>
-            <button onclick="adicionarItem('jogos','adm-jogo-nome')" title="Adicionar">+</button>
-          </div>
-          <div id="alert-adm-jogos" class="alert"></div>
-          <div class="adm-list" id="list-jogos"></div>
-        </div>
-      </div>
-      <!-- Jornadas -->
-      <div class="adm-col col-jornada">
-        <div class="adm-col-header">
-          <div class="icon">🗺️</div>
-          <span class="col-title">Jornadas do Conecta</span>
-          <span class="col-count" id="count-jornadas">0</span>
-        </div>
-        <div class="adm-col-body">
-          <div class="adm-input-row">
-            <input id="adm-jornada-nome" type="text" placeholder="Nome da jornada…"/>
-            <button onclick="adicionarItem('jornadas','adm-jornada-nome')" title="Adicionar">+</button>
-          </div>
-          <div id="alert-adm-jornadas" class="alert"></div>
-          <div class="adm-list" id="list-jornadas"></div>
-        </div>
-      </div>
-    </div>
+    <hr class="divider"/>
+    <h3 style="font-size:0.95rem; margin-bottom:10px; color:#ea4335;">⚠️ Zona de perigo</h3>
+    <p style="font-size:0.84rem; color:#666; margin-bottom:14px;">Apaga <strong>todos</strong> os registros e cadastros permanentemente.</p>
+    <button class="btn btn-danger" onclick="confirmarLimpar()">🗑️ Apagar todos os dados</button>
   </div>
 </div>
 
@@ -800,220 +683,19 @@
   </div>
 </div>
 
-<!-- ============ MODAL: USUÁRIO ============ -->
-<div class="modal-overlay" id="modal-user-overlay">
-  <div class="modal" style="max-width:480px;">
-    <button class="modal-close" onclick="fecharModalUser()">✕</button>
-    <h2 id="modal-user-title" style="color:#5c6bc0;">➕ Novo Usuário</h2>
-    <input type="hidden" id="user-edit-id"/>
-    <div id="alert-modal-user" class="alert"></div>
-    <label>Nome completo *</label>
-    <input id="user-nome" type="text" placeholder="Nome completo do usuário"/>
-    <label>Nome de usuário *</label>
-    <input id="user-username" type="text" placeholder="Login do usuário"/>
-    <label>Função *</label>
-    <select id="user-role">
-      <option value="user">Usuário</option>
-      <option value="admin">Administrador</option>
-    </select>
-    <label>Nova senha <span id="senha-optional" style="font-weight:400;color:#999;">*</span></label>
-    <input id="user-senha" type="password" placeholder="Mínimo 4 caracteres"/>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="salvarUsuario()" style="background:#5c6bc0;">💾 Salvar</button>
-      <button class="btn btn-secondary" onclick="fecharModalUser()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
 <!-- ==================== JAVASCRIPT ==================== -->
 <script>
-  /* ──────────────────────────────────────
-     STORAGE KEYS
-     ────────────────────────────────────── */
+  /* ────────────── STORAGE KEYS ────────────── */
   const KEY_AULAS   = "conecta_aulas_v2";
   const KEY_ADM     = "conecta_adm_v2";
-  const KEY_USERS   = "conecta_users_v1";
-  const KEY_SESSION = "conecta_session";
+  const KEY_GIT     = "conecta_git_config";
+  const KEY_LASTSYN = "conecta_last_sync";
 
-  /* ──────────────────────────────────────
-     SESSÃO
-     ────────────────────────────────────── */
-  let currentUser = null;
+  const GITHUB_API = "https://api.github.com";
+  const VERSAO = "4.0";
 
-  function getUsers() {
-    try { return JSON.parse(localStorage.getItem(KEY_USERS)) || []; }
-    catch { return []; }
-  }
-  function saveUsers(u) { localStorage.setItem(KEY_USERS, JSON.stringify(u)); }
-
-  function isAdmin() {
-    return currentUser && currentUser.role === "admin";
-  }
-
-  /* ──────────────────────────────────────
-     HASH DE SENHA (SHA-256 via Web Crypto)
-     ────────────────────────────────────── */
-  async function hashPassword(password) {
-    const enc = new TextEncoder();
-    const data = enc.encode(password);
-    const hashBuf = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(hashBuf))
-      .map(b => b.toString(16).padStart(2, "0"))
-      .join("");
-  }
-
-  /* ──────────────────────────────────────
-     EXIBIR TELA
-     ────────────────────────────────────── */
-  function showScreen(name) {
-    ["screen-setup", "screen-login", "screen-app"].forEach(id => {
-      document.getElementById(id).classList.remove("active");
-    });
-    const el = document.getElementById("screen-" + name);
-    el.classList.add("active");
-    if (name === "app") {
-      document.getElementById("screen-app").style.display = "flex";
-    } else {
-      document.getElementById("screen-app").style.display = "none";
-    }
-  }
-
-  /* ──────────────────────────────────────
-     INICIALIZAÇÃO
-     ────────────────────────────────────── */
-  async function init() {
-    // Checa sessão ativa
-    const sessionId = sessionStorage.getItem(KEY_SESSION);
-    if (sessionId) {
-      const users = getUsers();
-      const user = users.find(u => u.id === sessionId && u.active);
-      if (user) {
-        currentUser = user;
-        showScreen("app");
-        initApp();
-        return;
-      }
-      sessionStorage.removeItem(KEY_SESSION);
-    }
-
-    // Sem sessão → setup ou login
-    const users = getUsers();
-    if (users.length === 0) {
-      showScreen("setup");
-    } else {
-      showScreen("login");
-      document.getElementById("login-user").focus();
-    }
-  }
-
-  /* ──────────────────────────────────────
-     SETUP: CRIAR PRIMEIRO ADMIN
-     ────────────────────────────────────── */
-  async function criarAdmin() {
-    const alertEl  = document.getElementById("alert-setup");
-    const nome     = document.getElementById("setup-nome").value.trim();
-    const username = document.getElementById("setup-user").value.trim();
-    const senha    = document.getElementById("setup-senha").value;
-    const senha2   = document.getElementById("setup-senha2").value;
-
-    if (!nome)     return showAuthAlert(alertEl, "Preencha o nome completo.", "error");
-    if (!username) return showAuthAlert(alertEl, "Preencha o nome de usuário.", "error");
-    if (username.length < 3) return showAuthAlert(alertEl, "Usuário deve ter pelo menos 3 caracteres.", "error");
-    if (senha.length < 4) return showAuthAlert(alertEl, "Senha deve ter pelo menos 4 caracteres.", "error");
-    if (senha !== senha2) return showAuthAlert(alertEl, "As senhas não conferem.", "error");
-
-    // Verifica se usuário já existe
-    const users = getUsers();
-    if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-      return showAuthAlert(alertEl, "Este nome de usuário já existe.", "error");
-    }
-
-    const hash = await hashPassword(senha);
-    const newUser = {
-      id: genId(),
-      nome,
-      username,
-      passwordHash: hash,
-      role: "admin",
-      active: true,
-      created_at: nowISO()
-    };
-    users.push(newUser);
-    saveUsers(users);
-
-    // Loga automaticamente
-    sessionStorage.setItem(KEY_SESSION, newUser.id);
-    currentUser = newUser;
-    showScreen("app");
-    initApp();
-  }
-
-  /* ──────────────────────────────────────
-     LOGIN
-     ────────────────────────────────────── */
-  async function fazerLogin() {
-    const alertEl  = document.getElementById("alert-login");
-    const username = document.getElementById("login-user").value.trim();
-    const senha    = document.getElementById("login-senha").value;
-
-    if (!username || !senha) return showAuthAlert(alertEl, "Preencha usuário e senha.", "error");
-
-    const users = getUsers();
-    const user  = users.find(u => u.username.toLowerCase() === username.toLowerCase());
-    if (!user) return showAuthAlert(alertEl, "Usuário não encontrado.", "error");
-    if (!user.active) return showAuthAlert(alertEl, "Usuário desativado. Contate o administrador.", "error");
-
-    const hash = await hashPassword(senha);
-    if (hash !== user.passwordHash) return showAuthAlert(alertEl, "Senha incorreta.", "error");
-
-    sessionStorage.setItem(KEY_SESSION, user.id);
-    currentUser = user;
-    showScreen("app");
-    initApp();
-  }
-
-  /* ──────────────────────────────────────
-     LOGOUT
-     ────────────────────────────────────── */
-  function logout() {
-    sessionStorage.removeItem(KEY_SESSION);
-    currentUser = null;
-    // Reseta UI
-    document.querySelectorAll(".tab-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
-    document.querySelectorAll(".tab-content").forEach((t, i) => t.classList.toggle("active", i === 0));
-    showScreen("login");
-    document.getElementById("login-user").focus();
-  }
-
-  /* ──────────────────────────────────────
-     INICIALIZAR APP (após login)
-     ────────────────────────────────────── */
-  function initApp() {
-    if (!currentUser) return;
-    document.getElementById("header-nome").textContent = currentUser.nome;
-    document.getElementById("header-role").textContent =
-      currentUser.role === "admin" ? "Admin" : "Usuário";
-
-    const n = new Date();
-    document.getElementById("f-data").value = n.toISOString().slice(0, 10);
-    document.getElementById("f-hora").value = n.toTimeString().slice(0, 5);
-    populateFormSelects();
-    renderStats();
-    updateClock();
-
-    // Se a aba admin estiver ativa, renderiza
-    if (document.getElementById("tab-admin").classList.contains("active")) {
-      renderUserTable();
-      renderLists();
-    }
-  }
-
-  /* ──────────────────────────────────────
-     HELPERS GERAIS
-     ────────────────────────────────────── */
-  function genId() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-  }
+  /* ────────────── HELPERS GERAIS ────────────── */
+  function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
   function nowISO() { return new Date().toISOString(); }
   function esc(s) {
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -1023,53 +705,29 @@
     const [y, m, dia] = d.split("-");
     return `${dia}/${m}/${y}`;
   }
-  function showAuthAlert(el, msg, tipo) {
-    el.textContent = msg;
-    el.className = "auth-alert " + tipo + " show";
-    setTimeout(() => el.classList.remove("show"), 4000);
-  }
   function showAlert(id, msg, tipo) {
     const el = document.getElementById(id);
     if (!el) return;
     el.textContent = msg;
     el.className = "alert alert-" + tipo + " show";
-    setTimeout(() => el.classList.remove("show"), 4000);
+    setTimeout(() => el.classList.remove("show"), 5000);
   }
 
-  /* ──────────────────────────────────────
-     CLOCK
-     ────────────────────────────────────── */
+  /* ────────────── CLOCK ────────────── */
   function updateClock() {
     document.getElementById("datetime").textContent =
       new Date().toLocaleDateString("pt-BR") + "  " + new Date().toLocaleTimeString("pt-BR");
   }
   setInterval(updateClock, 1000);
 
-  /* ──────────────────────────────────────
-     TABS
-     ────────────────────────────────────── */
-  function switchTab(name, btn) {
-    document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    document.getElementById("tab-" + name).classList.add("active");
-    if (btn) btn.classList.add("active");
-    if (name === "consultar") { populateFiltros(); renderTabela(); renderStats(); }
-    if (name === "lancar")    { populateFormSelects(); }
-    if (name === "admin")     { renderUserTable(); renderLists(); }
-  }
-
-  /* ──────────────────────────────────────
-     DADOS DE AULAS
-     ────────────────────────────────────── */
+  /* ────────────── DADOS DE AULAS ────────────── */
   function getAulas() {
     try { return JSON.parse(localStorage.getItem(KEY_AULAS)) || []; }
     catch { return []; }
   }
   function saveAulas(a) { localStorage.setItem(KEY_AULAS, JSON.stringify(a)); }
 
-  /* ──────────────────────────────────────
-     DADOS ADMIN (listas)
-     ────────────────────────────────────── */
+  /* ────────────── DADOS ADMIN ────────────── */
   function getAdm() {
     try {
       return JSON.parse(localStorage.getItem(KEY_ADM)) ||
@@ -1078,9 +736,224 @@
   }
   function saveAdm(a) { localStorage.setItem(KEY_ADM, JSON.stringify(a)); }
 
-  /* ──────────────────────────────────────
-     POPULATE SELECTS
-     ────────────────────────────────────── */
+  /* ────────────── CONFIG GITHUB ────────────── */
+  function getGitConfig() {
+    try { return JSON.parse(localStorage.getItem(KEY_GIT)) || null; }
+    catch { return null; }
+  }
+  function saveGitConfig(cfg) { localStorage.setItem(KEY_GIT, JSON.stringify(cfg)); }
+
+  function lerFormConfig() {
+    return {
+      token:  document.getElementById("git-token").value.trim(),
+      owner:  document.getElementById("git-owner").value.trim(),
+      repo:   document.getElementById("git-repo").value.trim(),
+      branch: document.getElementById("git-branch").value.trim() || "main",
+      path:   document.getElementById("git-path").value.trim() || "data/conecta_aulas.json",
+    };
+  }
+
+  function preencherFormConfig() {
+    const cfg = getGitConfig();
+    if (!cfg) return;
+    document.getElementById("git-token").value  = cfg.token || "";
+    document.getElementById("git-owner").value  = cfg.owner || "";
+    document.getElementById("git-repo").value   = cfg.repo || "";
+    document.getElementById("git-branch").value = cfg.branch || "main";
+    document.getElementById("git-path").value   = cfg.path || "data/conecta_aulas.json";
+    document.getElementById("git-autosync").checked = !!cfg.autosync;
+  }
+
+  /* ────────────── BASE64 (UTF-8 seguro) ────────────── */
+  function encodeBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function decodeBase64(b64) {
+    const clean = String(b64).replace(/\s+/g, "");
+    return decodeURIComponent(escape(atob(clean)));
+  }
+
+  /* ────────────── REQUEST GITHUB ────────────── */
+  async function githubRequest(path, cfg, options = {}) {
+    const config = cfg || getGitConfig();
+    if (!config || !config.token) throw new Error("Configuração do GitHub não salva.");
+
+    const headers = {
+      "Authorization": "token " + config.token,
+      "Accept": "application/vnd.github+json",
+    };
+    if (options.headers) Object.assign(headers, options.headers);
+
+    const res = await fetch(GITHUB_API + path, { ...options, headers });
+    if (!res.ok) {
+      let msg = "Erro " + res.status;
+      try {
+        const d = await res.json();
+        if (d.message) msg += " — " + d.message;
+      } catch {}
+      throw new Error(msg);
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  }
+
+  /* ────────────── TESTAR CONEXÃO ────────────── */
+  async function testarConexao() {
+    const cfg = lerFormConfig();
+    if (!cfg.token || !cfg.owner || !cfg.repo) {
+      return showAlert("alert-git", "Preencha Token, Owner e Repositório.", "error");
+    }
+    showAlert("alert-git", "Testando conexão...", "info");
+    try {
+      const user = await githubRequest("/user", cfg);
+      const repo = await githubRequest(`/repos/${cfg.owner}/${cfg.repo}`, cfg);
+      showAlert("alert-git", `✅ Conexão OK! Usuário: ${user.login} · Repositório: ${repo.full_name}`, "success");
+    } catch (e) {
+      showAlert("alert-git", "❌ Falha na conexão: " + e.message, "error");
+    }
+  }
+
+  /* ────────────── SALVAR CONFIGURAÇÃO ────────────── */
+  function salvarConfiguracao() {
+    const cfg = lerFormConfig();
+    if (!cfg.token || !cfg.owner || !cfg.repo) {
+      return showAlert("alert-git", "Preencha Token, Owner e Repositório.", "error");
+    }
+    cfg.autosync = document.getElementById("git-autosync").checked;
+    saveGitConfig(cfg);
+    atualizarStatusConexao();
+    showAlert("alert-git", "✅ Configuração salva com sucesso!", "success");
+  }
+
+  /* ────────────── SINCRONIZAÇÃO ────────────── */
+  async function baixarDados() {
+    const cfg = getGitConfig();
+    if (!cfg) return showAlert("alert-sync", "Configure a conexão com o GitHub primeiro.", "error");
+    showAlert("alert-sync", "Baixando dados do GitHub...", "info");
+    try {
+      const refParam = "?ref=" + encodeURIComponent(cfg.branch);
+      const res = await githubRequest(`/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}${refParam}`, cfg);
+      const content = decodeBase64(res.content);
+      const data = JSON.parse(content);
+
+      if (Array.isArray(data.aulas)) saveAulas(data.aulas);
+      if (data.adm) saveAdm(data.adm);
+
+      // Atualiza interface
+      populateFormSelects();
+      populateFiltros();
+      renderStats();
+      renderTabela();
+      renderLists();
+      registrarSync("baixado");
+      showAlert("alert-sync", `✅ Dados baixados! ${(data.aulas || []).length} lançamento(s).`, "success");
+    } catch (e) {
+      showAlert("alert-sync", "❌ Erro ao baixar: " + e.message, "error");
+    }
+  }
+
+  async function enviarDados(silent = false) {
+    const cfg = getGitConfig();
+    if (!cfg) {
+      if (!silent) showAlert("alert-sync", "Configure a conexão com o GitHub primeiro.", "error");
+      throw new Error("Configuração não encontrada.");
+    }
+    if (!silent) showAlert("alert-sync", "Enviando dados para o GitHub...", "info");
+    try {
+      const payload = {
+        versao: VERSAO,
+        atualizado_em: nowISO(),
+        aulas: getAulas(),
+        adm: getAdm()
+      };
+      const content = encodeBase64(JSON.stringify(payload, null, 2));
+
+      // Verifica se o arquivo já existe (para obter o sha)
+      let sha = null;
+      try {
+        const refParam = "?ref=" + encodeURIComponent(cfg.branch);
+        const existing = await githubRequest(`/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}${refParam}`, cfg);
+        sha = existing.sha;
+      } catch (e) {
+        // arquivo não existe — será criado
+      }
+
+      const body = {
+        message: "Sincronização de dados — " + new Date().toLocaleString("pt-BR"),
+        content: content,
+        branch: cfg.branch
+      };
+      if (sha) body.sha = sha;
+
+      await githubRequest(`/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, cfg, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      registrarSync("enviado");
+      if (!silent) showAlert("alert-sync", "✅ Dados enviados para o GitHub com sucesso!", "success");
+    } catch (e) {
+      if (!silent) showAlert("alert-sync", "❌ Erro ao enviar: " + e.message, "error");
+      throw e;
+    }
+  }
+
+  function registrarSync(tipo) {
+    const info = { tipo, quando: nowISO() };
+    localStorage.setItem(KEY_LASTSYN, JSON.stringify(info));
+    atualizarUltimaSync();
+    atualizarStatusConexao();
+  }
+
+  function atualizarUltimaSync() {
+    try {
+      const info = JSON.parse(localStorage.getItem(KEY_LASTSYN));
+      const el = document.getElementById("ultima-sync");
+      if (el && info) {
+        const d = new Date(info.quando);
+        el.textContent = "Última sincronização: " + d.toLocaleString("pt-BR") +
+          (info.tipo === "enviado" ? " (enviado)" : " (baixado)");
+      }
+    } catch {}
+  }
+
+  function atualizarStatusConexao() {
+    const cfg = getGitConfig();
+    const dot = document.getElementById("sync-dot");
+    const label = document.getElementById("sync-label");
+    const badge = document.getElementById("github-status-badge");
+
+    if (!cfg) {
+      dot.className = "sync-dot";
+      label.textContent = "Não conectado";
+      if (badge) { badge.textContent = "Não configurado"; badge.className = "github-badge badge-disconnected"; }
+      return;
+    }
+    dot.className = "sync-dot connected";
+    label.textContent = cfg.owner + "/" + cfg.repo;
+    if (badge) { badge.textContent = "Configurado"; badge.className = "github-badge badge-connected"; }
+  }
+
+  function irParaConfiguracoes() {
+    switchTab("config");
+  }
+
+  /* ────────────── TABS ────────────── */
+  function switchTab(name) {
+    document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById("tab-" + name).classList.add("active");
+    const btn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
+    if (btn) btn.classList.add("active");
+
+    if (name === "consultar") { populateFiltros(); renderTabela(); renderStats(); }
+    if (name === "lancar")    { populateFormSelects(); }
+    if (name === "admin")     { renderLists(); }
+    if (name === "config")    { atualizarUltimaSync(); atualizarStatusConexao(); }
+  }
+
+  /* ────────────── POPULATE SELECTS ────────────── */
   function populateSelect(id, lista, valorSel) {
     const sel = document.getElementById(id);
     if (!sel) return;
@@ -1120,9 +993,7 @@
     populateSelect("edit-jornada", adm.jornadas, aula.jornada);
   }
 
-  /* ──────────────────────────────────────
-     SALVAR AULA
-     ────────────────────────────────────── */
+  /* ────────────── SALVAR AULA ────────────── */
   function salvarAula() {
     const professor = document.getElementById("f-professor").value;
     const turma = document.getElementById("f-turma").value;
@@ -1146,12 +1017,12 @@
       id: genId(), professor, turma, jornada,
       jogo_aplicado: jogo, data, hora,
       atividade_executada: atividade, comentarios,
-      created_at: nowISO(), updated_at: nowISO(),
-      criado_por: currentUser ? currentUser.id : null
+      created_at: nowISO(), updated_at: nowISO()
     });
     saveAulas(aulas);
-    showAlert("alert-lancar", "✅ Lançamento salvo com sucesso!", "success");
     limparForm();
+    showAlert("alert-lancar", "✅ Lançamento salvo com sucesso!", "success");
+    sincronizarAutomaticamente();
   }
 
   function limparForm() {
@@ -1162,9 +1033,19 @@
     document.getElementById("f-hora").value = n.toTimeString().slice(0, 5);
   }
 
-  /* ──────────────────────────────────────
-     STATS
-     ────────────────────────────────────── */
+  async function sincronizarAutomaticamente() {
+    const cfg = getGitConfig();
+    const auto = document.getElementById("git-autosync");
+    if (!cfg || !auto || !auto.checked) return;
+    try {
+      await enviarDados(true);
+      console.log("Auto-sync concluído.");
+    } catch (e) {
+      console.warn("Auto-sync falhou:", e.message);
+    }
+  }
+
+  /* ────────────── STATS ────────────── */
   function renderStats() {
     const a = getAulas();
     document.getElementById("stats-area").innerHTML = `
@@ -1176,9 +1057,7 @@
     `;
   }
 
-  /* ──────────────────────────────────────
-     TABELA (CONSULTAR)
-     ────────────────────────────────────── */
+  /* ────────────── TABELA ────────────── */
   function limparFiltros() {
     ["fil-professor", "fil-turma", "fil-jornada", "fil-jogo"].forEach(id => document.getElementById(id).value = "");
     ["fil-data-ini", "fil-data-fim", "fil-texto"].forEach(id => document.getElementById(id).value = "");
@@ -1212,28 +1091,13 @@
       area.innerHTML = `<div class="empty-state"><div style="font-size:2.5rem;">📭</div><p>Nenhum registro encontrado.</p></div>`;
       return;
     }
-
-    const admin = isAdmin();
-
     area.innerHTML = `
       <table>
         <thead><tr>
           <th>Data</th><th>Hora</th><th>Professor</th><th>Turma</th>
           <th>Jornada</th><th>Jogo Aplicado</th><th>Atividade</th><th>Comentários</th><th>Ações</th>
         </tr></thead>
-        <tbody>${f.map(a => {
-          // Botão de excluir: só admin vê
-          let btnExcluir = "";
-          if (admin) {
-            btnExcluir = `<button class="btn btn-danger btn-sm" onclick="excluirAula('${a.id}')">🗑️</button>`;
-          } else {
-            btnExcluir = `<span class="tooltip-wrap">
-              <button class="btn btn-danger btn-sm btn-disabled" disabled>🗑️</button>
-              <span class="tooltip-text">Apenas administradores</span>
-            </span>`;
-          }
-
-          return `
+        <tbody>${f.map(a => `
           <tr>
             <td>${formatDate(a.data)}</td>
             <td>${a.hora}</td>
@@ -1245,19 +1109,16 @@
             <td style="max-width:160px;">${esc(a.comentarios || "–")}</td>
             <td><div class="td-actions">
               <button class="btn btn-warning btn-sm" onclick="abrirEdicao('${a.id}')">✏️</button>
-              ${btnExcluir}
+              <button class="btn btn-danger btn-sm" onclick="excluirAula('${a.id}')">🗑️</button>
             </div></td>
-          </tr>`;
-        }).join("")}
+          </tr>`).join("")}
         </tbody>
       </table>
       <p style="margin-top:10px;font-size:0.82rem;color:#999;">${f.length} registro(s) encontrado(s).</p>
     `;
   }
 
-  /* ──────────────────────────────────────
-     EDIÇÃO DE AULA
-     ────────────────────────────────────── */
+  /* ────────────── EDIÇÃO ────────────── */
   function abrirEdicao(id) {
     const aula = getAulas().find(a => a.id === id);
     if (!aula) return;
@@ -1291,25 +1152,18 @@
     populateFiltros();
     renderTabela();
     renderStats();
+    sincronizarAutomaticamente();
   }
 
-  /* ──────────────────────────────────────
-     EXCLUIR AULA (SOMENTE ADMIN)
-     ────────────────────────────────────── */
   function excluirAula(id) {
-    if (!isAdmin()) {
-      alert("Apenas administradores podem excluir lançamentos.");
-      return;
-    }
     if (!confirm("Confirma excluir este lançamento?")) return;
     saveAulas(getAulas().filter(a => a.id !== id));
     renderTabela();
     renderStats();
+    sincronizarAutomaticamente();
   }
 
-  /* ──────────────────────────────────────
-     ADMINISTRAÇÃO – LISTAS
-     ────────────────────────────────────── */
+  /* ────────────── ADMINISTRAÇÃO ────────────── */
   const admMeta = {
     professores: { listId: "list-professores", countId: "count-professores", alertId: "alert-adm-professores" },
     turmas: { listId: "list-turmas", countId: "count-turmas", alertId: "alert-adm-turmas" },
@@ -1330,6 +1184,7 @@
     renderLists();
     populateFormSelects();
     showAlert(alertId, `✅ "${valor}" adicionado!`, "success");
+    sincronizarAutomaticamente();
   }
 
   function removerItem(campo, valor) {
@@ -1339,6 +1194,7 @@
     saveAdm(adm);
     renderLists();
     populateFormSelects();
+    sincronizarAutomaticamente();
   }
 
   function renderLists() {
@@ -1372,190 +1228,7 @@
     });
   });
 
-  /* ──────────────────────────────────────
-     ADMINISTRAÇÃO – USUÁRIOS
-     ────────────────────────────────────── */
-  function renderUserTable() {
-    const section = document.getElementById("admin-users-section");
-    // Apenas admin vê esta seção
-    if (!isAdmin()) {
-      section.style.display = "none";
-      return;
-    }
-    section.style.display = "block";
-
-    const users = getUsers();
-    const tbody = document.getElementById("users-tbody");
-    const empty = document.getElementById("users-empty");
-
-    if (!users.length) {
-      tbody.innerHTML = "";
-      empty.style.display = "block";
-      return;
-    }
-    empty.style.display = "none";
-
-    tbody.innerHTML = users.map(u => {
-      // Determinar se é o próprio usuário logado
-      const isSelf = currentUser && currentUser.id === u.id;
-
-      // Botão de ativar/inativar
-      let btnToggle = "";
-      if (!isSelf) {
-        btnToggle = `<button class="btn btn-xs" style="background:#6c757d;color:#fff;" onclick="toggleUsuario('${u.id}')">${u.active ? '🔒 Inativar' : '🔓 Ativar'}</button>`;
-      } else {
-        btnToggle = `<span class="tooltip-wrap">
-          <button class="btn btn-xs btn-disabled" style="background:#6c757d;color:#fff;" disabled>🔒</button>
-          <span class="tooltip-text">Não pode alterar a si mesmo</span>
-        </span>`;
-      }
-
-      return `
-      <tr>
-        <td>${esc(u.nome)}${isSelf ? ' <span style="font-size:0.72rem;color:#1a73e8;">(você)</span>' : ''}</td>
-        <td><code>${esc(u.username)}</code></td>
-        <td><span class="badge ${u.role === 'admin' ? 'badge-admin' : 'badge-user'}">${u.role === 'admin' ? 'Admin' : 'Usuário'}</span></td>
-        <td><span class="badge ${u.active ? 'badge-active' : 'badge-inactive'}">${u.active ? 'Ativo' : 'Inativo'}</span></td>
-        <td><div class="td-actions">
-          <button class="btn btn-warning btn-xs" onclick="editarUsuario('${u.id}')">✏️</button>
-          ${btnToggle}
-        </div></td>
-      </tr>`;
-    }).join("");
-  }
-
-  function abrirModalUser(userId) {
-    const modal = document.getElementById("modal-user-overlay");
-    const title = document.getElementById("modal-user-title");
-    document.getElementById("alert-modal-user").classList.remove("show");
-
-    if (userId) {
-      // Edição
-      const user = getUsers().find(u => u.id === userId);
-      if (!user) return;
-      title.textContent = "✏️ Editar Usuário";
-      document.getElementById("user-edit-id").value = userId;
-      document.getElementById("user-nome").value = user.nome;
-      document.getElementById("user-username").value = user.username;
-      document.getElementById("user-role").value = user.role;
-      document.getElementById("user-senha").value = "";
-      document.getElementById("senha-optional").textContent = "(opcional – deixe vazio para não alterar)";
-    } else {
-      // Novo
-      title.textContent = "➕ Novo Usuário";
-      document.getElementById("user-edit-id").value = "";
-      document.getElementById("user-nome").value = "";
-      document.getElementById("user-username").value = "";
-      document.getElementById("user-role").value = "user";
-      document.getElementById("user-senha").value = "";
-      document.getElementById("senha-optional").textContent = "*";
-    }
-    modal.classList.add("open");
-  }
-
-  function fecharModalUser() {
-    document.getElementById("modal-user-overlay").classList.remove("open");
-  }
-
-  async function salvarUsuario() {
-    const alertEl = document.getElementById("alert-modal-user");
-    const editId = document.getElementById("user-edit-id").value;
-    const nome = document.getElementById("user-nome").value.trim();
-    const username = document.getElementById("user-username").value.trim();
-    const role = document.getElementById("user-role").value;
-    const senha = document.getElementById("user-senha").value;
-    const isEditing = !!editId;
-
-    if (!nome) return showAlert("alert-modal-user", "Preencha o nome completo.", "error");
-    if (!username || username.length < 3) return showAlert("alert-modal-user", "Usuário deve ter pelo menos 3 caracteres.", "error");
-    if (!isEditing && senha.length < 4) return showAlert("alert-modal-user", "Senha deve ter pelo menos 4 caracteres.", "error");
-    if (isEditing && senha && senha.length < 4) return showAlert("alert-modal-user", "Senha deve ter pelo menos 4 caracteres.", "error");
-
-    const users = getUsers();
-
-    // Verifica duplicidade de username
-    const dup = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.id !== editId);
-    if (dup) return showAlert("alert-modal-user", "Este nome de usuário já está em uso.", "error");
-
-    if (isEditing) {
-      // Edição
-      const idx = users.findIndex(u => u.id === editId);
-      if (idx === -1) return showAlert("alert-modal-user", "Usuário não encontrado.", "error");
-
-      // Se está rebaixando o último admin ativo de admin para user
-      if (users[idx].role === "admin" && role === "user" && users[idx].active) {
-        const activeAdmins = users.filter(u => u.role === "admin" && u.active && u.id !== editId);
-        if (activeAdmins.length === 0) {
-          return showAlert("alert-modal-user", "Não é possível rebaixar o último administrador ativo. Crie outro admin primeiro.", "error");
-        }
-      }
-
-      users[idx].nome = nome;
-      users[idx].username = username;
-      users[idx].role = role;
-
-      if (senha) {
-        users[idx].passwordHash = await hashPassword(senha);
-      }
-
-      // Se o admin editou a si mesmo, atualiza currentUser
-      if (currentUser && currentUser.id === editId) {
-        currentUser = { ...currentUser, nome, username, role };
-        document.getElementById("header-nome").textContent = nome;
-        document.getElementById("header-role").textContent = role === "admin" ? "Admin" : "Usuário";
-      }
-    } else {
-      // Novo usuário — permite criar quantos admins quiser
-      const hash = await hashPassword(senha);
-      users.push({
-        id: genId(),
-        nome, username, passwordHash: hash,
-        role, active: true,
-        created_at: nowISO()
-      });
-    }
-
-    saveUsers(users);
-    fecharModalUser();
-    renderUserTable();
-  }
-
-  function editarUsuario(id) {
-    abrirModalUser(id);
-  }
-
-  /* ──────────────────────────────────────
-     ATIVAR / INATIVAR USUÁRIO
-     (exclusão removida – apenas inativação)
-     ────────────────────────────────────── */
-  function toggleUsuario(id) {
-    // Não pode alterar a si mesmo
-    if (currentUser && currentUser.id === id) {
-      alert("Você não pode alterar o status do seu próprio usuário.");
-      return;
-    }
-
-    const users = getUsers();
-    const user = users.find(u => u.id === id);
-    if (!user) return;
-
-    // Se estiver tentando inativar o último admin ativo
-    if (user.role === "admin" && user.active) {
-      const activeAdmins = users.filter(u => u.role === "admin" && u.active && u.id !== id);
-      if (activeAdmins.length === 0) {
-        alert("Não é possível inativar o último administrador ativo. Crie outro admin primeiro.");
-        return;
-      }
-    }
-
-    user.active = !user.active;
-    saveUsers(users);
-    renderUserTable();
-  }
-
-  /* ──────────────────────────────────────
-     EXPORTAÇÃO CSV
-     ────────────────────────────────────── */
+  /* ────────────── CSV ────────────── */
   function exportarCSV() {
     const aulas = getAulas();
     if (!aulas.length) return alert("Nenhum dado para exportar.");
@@ -1566,16 +1239,13 @@
     download("aulas_conecta.csv", rows.join("\n"), "text/csv;charset=utf-8;");
   }
 
-  /* ──────────────────────────────────────
-     BACKUP JSON
-     ────────────────────────────────────── */
+  /* ────────────── BACKUP JSON ────────────── */
   function exportarJSON() {
     const payload = JSON.stringify({
-      versao: "3.1",
+      versao: VERSAO,
       exportado_em: nowISO(),
       aulas: getAulas(),
-      adm: getAdm(),
-      users: getUsers()
+      adm: getAdm()
     }, null, 2);
     download("backup_conecta_aulas.json", payload, "application/json");
   }
@@ -1589,20 +1259,15 @@
         const parsed = JSON.parse(e.target.result);
         const aulas = parsed.aulas || [];
         const adm = parsed.adm || { professores: [], turmas: [], jogos: [], jornadas: [] };
-        const users = parsed.users || [];
         if (!Array.isArray(aulas)) throw new Error();
-        const msg = `Restaurar ${aulas.length} lançamento(s), ${users.length} usuário(s) e cadastros?\n\nIsso substituirá todos os dados atuais.`;
-        if (!confirm(msg)) return;
+        if (!confirm(`Restaurar ${aulas.length} lançamento(s) e cadastros?\nIsso substituirá os dados atuais.`)) return;
         saveAulas(aulas);
         saveAdm(adm);
-        saveUsers(users);
-        showAlert("alert-backup", `✅ ${aulas.length} lançamento(s) e ${users.length} usuário(s) restaurados!`, "success");
+        populateFormSelects();
+        renderLists();
+        renderStats();
+        showAlert("alert-backup", `✅ ${aulas.length} lançamento(s) e cadastros restaurados!`, "success");
         document.getElementById("import-file").value = "";
-
-        // Se usuário atual foi sobrescrito, força logout
-        if (currentUser && !users.find(u => u.id === currentUser.id)) {
-          logout();
-        }
       } catch {
         showAlert("alert-backup", "❌ Arquivo inválido ou corrompido.", "error");
       }
@@ -1611,22 +1276,17 @@
   }
 
   function confirmarLimpar() {
-    if (!isAdmin()) {
-      alert("Apenas administradores podem apagar todos os dados.");
-      return;
-    }
     if (!confirm("⚠️ Apagar TODOS os dados permanentemente?")) return;
     if (!confirm("Confirma? Esta ação não pode ser desfeita.")) return;
     saveAulas([]);
     saveAdm({ professores: [], turmas: [], jogos: [], jornadas: [] });
-    saveUsers([]);
+    populateFormSelects();
+    renderLists();
+    renderStats();
     showAlert("alert-backup", "Todos os dados foram apagados.", "warning");
-    logout();
   }
 
-  /* ──────────────────────────────────────
-     DOWNLOAD HELPER
-     ────────────────────────────────────── */
+  /* ────────────── DOWNLOAD ────────────── */
   function download(filename, content, mime) {
     const blob = new Blob(["\uFEFF" + content], { type: mime });
     const url = URL.createObjectURL(blob);
@@ -1637,31 +1297,19 @@
     URL.revokeObjectURL(url);
   }
 
-  /* ──────────────────────────────────────
-     ENTER NO LOGIN
-     ────────────────────────────────────── */
-  document.addEventListener("DOMContentLoaded", () => {
-    ["login-senha"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener("keydown", e => {
-        if (e.key === "Enter") { e.preventDefault(); fazerLogin(); }
-      });
-    });
-    ["setup-nome", "setup-user", "setup-senha", "setup-senha2"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener("keydown", e => {
-        if (e.key === "Enter") e.preventDefault();
-      });
-    });
-    const lastSetup = document.getElementById("setup-senha2");
-    if (lastSetup) lastSetup.addEventListener("keydown", e => {
-      if (e.key === "Enter") { e.preventDefault(); criarAdmin(); }
-    });
-  });
+  /* ────────────── INIT ────────────── */
+  function init() {
+    const n = new Date();
+    document.getElementById("f-data").value = n.toISOString().slice(0, 10);
+    document.getElementById("f-hora").value = n.toTimeString().slice(0, 5);
+    preencherFormConfig();
+    populateFormSelects();
+    renderStats();
+    updateClock();
+    atualizarStatusConexao();
+    atualizarUltimaSync();
+  }
 
-  /* ──────────────────────────────────────
-     START
-     ────────────────────────────────────── */
   init();
 </script>
 </body>
