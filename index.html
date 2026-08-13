@@ -93,7 +93,6 @@
     }
     .card h2 { font-size: 1.1rem; color: #1a73e8; margin-bottom: 20px; }
     .card h2.purple { color: #6a1b9a; }
-    .card h2.orange { color: #e67e00; }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
@@ -145,7 +144,6 @@
     .btn-purple    { background: #8e24aa; color: #fff; }
     .btn-purple:hover { background: #6a1b9a; }
     .btn-sm { padding: 6px 12px; font-size: 0.80rem; }
-    .btn-xs { padding: 3px 8px; font-size: 0.74rem; border-radius: 4px; }
 
     .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; align-items: center; }
 
@@ -239,17 +237,28 @@
       border-radius: 12px;
     }
     .adm-col-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+
     .adm-input-row { display: flex; gap: 8px; }
     .adm-input-row input { flex: 1; font-size: 0.85rem; padding: 8px 10px; }
+    .adm-input-row input.editing {
+      border-color: #1a73e8;
+      background: #fffbe6;
+    }
     .adm-input-row button {
       flex-shrink: 0;
       width: 36px; height: 36px;
       border: none; border-radius: 6px;
-      cursor: pointer; font-size: 1.3rem;
+      cursor: pointer; font-size: 1.2rem;
       font-weight: 700;
       display: flex; align-items: center; justify-content: center;
       transition: all 0.2s;
     }
+    .adm-cancel-btn {
+      background: #f1f3f4; color: #666;
+      font-size: 1rem;
+    }
+    .adm-cancel-btn:hover { background: #e0e0e0; }
+
     .adm-list { flex: 1; overflow-y: auto; max-height: 340px; display: flex; flex-direction: column; gap: 6px; }
     .adm-item {
       display: flex;
@@ -261,50 +270,53 @@
       color: #333;
     }
     .adm-item span { flex: 1; word-break: break-word; }
-    .adm-item-del {
-      flex-shrink: 0;
+    .adm-item-actions { display: flex; gap: 2px; margin-left: 6px; flex-shrink: 0; }
+    .adm-item-btn {
       width: 26px; height: 26px;
       border: none; border-radius: 5px;
       background: transparent;
-      color: #bbb;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.88rem;
       display: flex; align-items: center; justify-content: center;
       transition: all 0.15s;
-      margin-left: 6px;
     }
+    .adm-item-edit { color: #bbb; }
+    .adm-item-edit:hover { background: #e3f2fd; color: #1a73e8; }
+    .adm-item-del { color: #bbb; }
     .adm-item-del:hover { background: #fdecea; color: #ea4335; }
+
     .adm-empty { text-align: center; padding: 24px 12px; color: #bbb; font-size: 0.83rem; }
 
+    /* Cores por coluna */
     .col-prof  .adm-col-header { background: #e8f5e9; border-color: #c8e6c9; }
     .col-prof  .adm-col-header .icon { background: #c8e6c9; }
     .col-prof  .adm-col-header .col-count { background: #c8e6c9; color: #2e7d32; }
-    .col-prof  .adm-input-row button { background: #34a853; color: #fff; }
-    .col-prof  .adm-input-row button:hover { background: #256e3a; }
+    .col-prof  .adm-add-btn { background: #34a853; color: #fff; }
+    .col-prof  .adm-add-btn:hover { background: #256e3a; }
     .col-prof  .adm-item { background: #f1f8f3; border: 1px solid #c8e6c9; }
     .col-prof  .adm-item:hover { background: #e8f5e9; }
 
     .col-turma .adm-col-header { background: #e3f2fd; border-color: #bbdefb; }
     .col-turma .adm-col-header .icon { background: #bbdefb; }
     .col-turma .adm-col-header .col-count { background: #bbdefb; color: #1565c0; }
-    .col-turma .adm-input-row button { background: #1a73e8; color: #fff; }
-    .col-turma .adm-input-row button:hover { background: #1558b0; }
+    .col-turma .adm-add-btn { background: #1a73e8; color: #fff; }
+    .col-turma .adm-add-btn:hover { background: #1558b0; }
     .col-turma .adm-item { background: #f1f7ff; border: 1px solid #bbdefb; }
     .col-turma .adm-item:hover { background: #e3f2fd; }
 
     .col-jogo  .adm-col-header { background: #fff3e0; border-color: #ffe0b2; }
     .col-jogo  .adm-col-header .icon { background: #ffe0b2; }
     .col-jogo  .adm-col-header .col-count { background: #ffe0b2; color: #e65100; }
-    .col-jogo  .adm-input-row button { background: #e67e00; color: #fff; }
-    .col-jogo  .adm-input-row button:hover { background: #b86200; }
+    .col-jogo  .adm-add-btn { background: #e67e00; color: #fff; }
+    .col-jogo  .adm-add-btn:hover { background: #b86200; }
     .col-jogo  .adm-item { background: #fffaf3; border: 1px solid #ffe0b2; }
     .col-jogo  .adm-item:hover { background: #fff3e0; }
 
     .col-jornada .adm-col-header { background: #f3e5f5; border-color: #e1bee7; }
     .col-jornada .adm-col-header .icon { background: #e1bee7; }
     .col-jornada .adm-col-header .col-count { background: #e1bee7; color: #6a1b9a; }
-    .col-jornada .adm-input-row button { background: #8e24aa; color: #fff; }
-    .col-jornada .adm-input-row button:hover { background: #6a1b9a; }
+    .col-jornada .adm-add-btn { background: #8e24aa; color: #fff; }
+    .col-jornada .adm-add-btn:hover { background: #6a1b9a; }
     .col-jornada .adm-item { background: #fdf6ff; border: 1px solid #e1bee7; }
     .col-jornada .adm-item:hover { background: #f3e5f5; }
 
@@ -320,7 +332,6 @@
     }
     .badge-connected { background: #e6f4ea; color: #1e7e34; }
     .badge-disconnected { background: #e0e0e0; color: #666; }
-    .badge-error { background: #fdecea; color: #b71c1c; }
 
     .divider { border: none; border-top: 1px solid #eee; margin: 24px 0; }
     .hint { font-size: 0.82rem; color: #999; margin-top: 6px; line-height: 1.5; }
@@ -356,10 +367,10 @@
 
 <!-- ==================== TABS ==================== -->
 <div class="tabs">
-  <button class="tab-btn active" data-tab="lancar"     onclick="switchTab('lancar')">➕ Lançar Aula</button>
-  <button class="tab-btn"        data-tab="consultar"  onclick="switchTab('consultar')">🔎 Consultar / Editar</button>
-  <button class="tab-btn admin"  data-tab="admin"      onclick="switchTab('admin')">⚙️ Administração</button>
-  <button class="tab-btn config" data-tab="config"     onclick="switchTab('config')">🔧 Configurações</button>
+  <button class="tab-btn active" data-tab="lancar"    onclick="switchTab('lancar')">➕ Lançar Aula</button>
+  <button class="tab-btn"        data-tab="consultar" onclick="switchTab('consultar')">🔎 Consultar / Editar</button>
+  <button class="tab-btn admin"  data-tab="admin"     onclick="switchTab('admin')">⚙️ Administração</button>
+  <button class="tab-btn config" data-tab="config"    onclick="switchTab('config')">🔧 Configurações</button>
 </div>
 
 <!-- ============ TAB 1: LANÇAR ============ -->
@@ -461,7 +472,7 @@
 <div id="tab-admin" class="tab-content">
   <div style="margin-bottom:20px;">
     <h2 style="font-size:1.15rem; color:#e67e00; margin-bottom:4px;">⚙️ Administração</h2>
-    <p style="color:#999; font-size:0.87rem;">Gerencie os itens disponíveis nos campos de seleção do formulário.</p>
+    <p style="color:#999; font-size:0.87rem;">Cadastre, edite e remova os itens disponíveis nos campos de seleção do formulário.</p>
   </div>
 
   <div class="adm-grid">
@@ -475,7 +486,8 @@
       <div class="adm-col-body">
         <div class="adm-input-row">
           <input id="adm-professor-nome" type="text" placeholder="Nome do professor…"/>
-          <button onclick="adicionarItem('professores','adm-professor-nome')" title="Adicionar">+</button>
+          <button class="adm-add-btn" onclick="adicionarItem('professores')" title="Adicionar">+</button>
+          <button class="adm-cancel-btn" id="btn-cancel-professores" onclick="cancelarEdicao('professores')" title="Cancelar" style="display:none;">✕</button>
         </div>
         <div id="alert-adm-professores" class="alert"></div>
         <div class="adm-list" id="list-professores"></div>
@@ -491,7 +503,8 @@
       <div class="adm-col-body">
         <div class="adm-input-row">
           <input id="adm-turma-nome" type="text" placeholder="Nome da turma…"/>
-          <button onclick="adicionarItem('turmas','adm-turma-nome')" title="Adicionar">+</button>
+          <button class="adm-add-btn" onclick="adicionarItem('turmas')" title="Adicionar">+</button>
+          <button class="adm-cancel-btn" id="btn-cancel-turmas" onclick="cancelarEdicao('turmas')" title="Cancelar" style="display:none;">✕</button>
         </div>
         <div id="alert-adm-turmas" class="alert"></div>
         <div class="adm-list" id="list-turmas"></div>
@@ -507,7 +520,8 @@
       <div class="adm-col-body">
         <div class="adm-input-row">
           <input id="adm-jogo-nome" type="text" placeholder="Nome do jogo…"/>
-          <button onclick="adicionarItem('jogos','adm-jogo-nome')" title="Adicionar">+</button>
+          <button class="adm-add-btn" onclick="adicionarItem('jogos')" title="Adicionar">+</button>
+          <button class="adm-cancel-btn" id="btn-cancel-jogos" onclick="cancelarEdicao('jogos')" title="Cancelar" style="display:none;">✕</button>
         </div>
         <div id="alert-adm-jogos" class="alert"></div>
         <div class="adm-list" id="list-jogos"></div>
@@ -523,7 +537,8 @@
       <div class="adm-col-body">
         <div class="adm-input-row">
           <input id="adm-jornada-nome" type="text" placeholder="Nome da jornada…"/>
-          <button onclick="adicionarItem('jornadas','adm-jornada-nome')" title="Adicionar">+</button>
+          <button class="adm-add-btn" onclick="adicionarItem('jornadas')" title="Adicionar">+</button>
+          <button class="adm-cancel-btn" id="btn-cancel-jornadas" onclick="cancelarEdicao('jornadas')" title="Cancelar" style="display:none;">✕</button>
         </div>
         <div id="alert-adm-jornadas" class="alert"></div>
         <div class="adm-list" id="list-jornadas"></div>
@@ -692,13 +707,16 @@
   const KEY_LASTSYN = "conecta_last_sync";
 
   const GITHUB_API = "https://api.github.com";
-  const VERSAO = "4.0";
+  const VERSAO = "4.1";
 
   /* ────────────── HELPERS GERAIS ────────────── */
   function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
   function nowISO() { return new Date().toISOString(); }
   function esc(s) {
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function escAttr(s) {
+    return String(s).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
   }
   function formatDate(d) {
     if (!d) return "";
@@ -765,9 +783,7 @@
   }
 
   /* ────────────── BASE64 (UTF-8 seguro) ────────────── */
-  function encodeBase64(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  }
+  function encodeBase64(str) { return btoa(unescape(encodeURIComponent(str))); }
   function decodeBase64(b64) {
     const clean = String(b64).replace(/\s+/g, "");
     return decodeURIComponent(escape(atob(clean)));
@@ -839,7 +855,7 @@
       if (Array.isArray(data.aulas)) saveAulas(data.aulas);
       if (data.adm) saveAdm(data.adm);
 
-      // Atualiza interface
+      resetarEdicaoGeral();
       populateFormSelects();
       populateFiltros();
       renderStats();
@@ -868,7 +884,6 @@
       };
       const content = encodeBase64(JSON.stringify(payload, null, 2));
 
-      // Verifica se o arquivo já existe (para obter o sha)
       let sha = null;
       try {
         const refParam = "?ref=" + encodeURIComponent(cfg.branch);
@@ -935,9 +950,7 @@
     if (badge) { badge.textContent = "Configurado"; badge.className = "github-badge badge-connected"; }
   }
 
-  function irParaConfiguracoes() {
-    switchTab("config");
-  }
+  function irParaConfiguracoes() { switchTab("config"); }
 
   /* ────────────── TABS ────────────── */
   function switchTab(name) {
@@ -1037,12 +1050,8 @@
     const cfg = getGitConfig();
     const auto = document.getElementById("git-autosync");
     if (!cfg || !auto || !auto.checked) return;
-    try {
-      await enviarDados(true);
-      console.log("Auto-sync concluído.");
-    } catch (e) {
-      console.warn("Auto-sync falhou:", e.message);
-    }
+    try { await enviarDados(true); console.log("Auto-sync concluído."); }
+    catch (e) { console.warn("Auto-sync falhou:", e.message); }
   }
 
   /* ────────────── STATS ────────────── */
@@ -1118,7 +1127,7 @@
     `;
   }
 
-  /* ────────────── EDIÇÃO ────────────── */
+  /* ────────────── EDIÇÃO DE AULA ────────────── */
   function abrirEdicao(id) {
     const aula = getAulas().find(a => a.id === id);
     if (!aula) return;
@@ -1165,19 +1174,57 @@
 
   /* ────────────── ADMINISTRAÇÃO ────────────── */
   const admMeta = {
-    professores: { listId: "list-professores", countId: "count-professores", alertId: "alert-adm-professores" },
-    turmas: { listId: "list-turmas", countId: "count-turmas", alertId: "alert-adm-turmas" },
-    jogos: { listId: "list-jogos", countId: "count-jogos", alertId: "alert-adm-jogos" },
-    jornadas: { listId: "list-jornadas", countId: "count-jornadas", alertId: "alert-adm-jornadas" },
+    professores: { listId: "list-professores", countId: "count-professores", alertId: "alert-adm-professores", inputId: "adm-professor-nome", cancelId: "btn-cancel-professores" },
+    turmas:      { listId: "list-turmas",      countId: "count-turmas",      alertId: "alert-adm-turmas",      inputId: "adm-turma-nome",      cancelId: "btn-cancel-turmas"      },
+    jogos:       { listId: "list-jogos",       countId: "count-jogos",       alertId: "alert-adm-jogos",       inputId: "adm-jogo-nome",       cancelId: "btn-cancel-jogos"       },
+    jornadas:    { listId: "list-jornadas",    countId: "count-jornadas",    alertId: "alert-adm-jornadas",    inputId: "adm-jornada-nome",    cancelId: "btn-cancel-jornadas"    },
   };
 
-  function adicionarItem(campo, inputId) {
-    const input = document.getElementById(inputId);
+  // Guarda o valor original quando um item está em modo de edição
+  const editState = {
+    professores: null,
+    turmas: null,
+    jogos: null,
+    jornadas: null,
+  };
+
+  function adicionarItem(campo) {
+    const meta = admMeta[campo];
+    const input = document.getElementById(meta.inputId);
     const valor = input.value.trim();
-    const { alertId } = admMeta[campo];
-    if (!valor) return showAlert(alertId, "Digite um valor antes de adicionar.", "error");
+    const { alertId } = meta;
+
+    if (!valor) return showAlert(alertId, "Digite um valor antes de salvar.", "error");
+
     const adm = getAdm();
-    if (adm[campo].includes(valor)) return showAlert(alertId, "Este item já está cadastrado.", "warning");
+
+    // MODO EDIÇÃO: atualiza o item existente
+    if (editState[campo] !== null) {
+      const original = editState[campo];
+      if (valor === original) {
+        cancelarEdicao(campo);
+        return;
+      }
+      if (adm[campo].includes(valor))
+        return showAlert(alertId, "Já existe um item com este nome.", "warning");
+
+      const idx = adm[campo].indexOf(original);
+      if (idx === -1) { cancelarEdicao(campo); return; }
+
+      adm[campo][idx] = valor;
+      saveAdm(adm);
+      cancelarEdicao(campo);
+      renderLists();
+      populateFormSelects();
+      showAlert(alertId, `✅ Item atualizado para "${valor}"!`, "success");
+      sincronizarAutomaticamente();
+      return;
+    }
+
+    // MODO ADIÇÃO: insere novo item
+    if (adm[campo].includes(valor))
+      return showAlert(alertId, "Este item já está cadastrado.", "warning");
+
     adm[campo].push(valor);
     saveAdm(adm);
     input.value = "";
@@ -1187,11 +1234,51 @@
     sincronizarAutomaticamente();
   }
 
+  function editarItem(campo, valor) {
+    const meta = admMeta[campo];
+    const input = document.getElementById(meta.inputId);
+    editState[campo] = valor;
+    input.value = valor;
+    input.focus();
+    renderInputRow(campo);
+  }
+
+  function cancelarEdicao(campo) {
+    const meta = admMeta[campo];
+    const input = document.getElementById(meta.inputId);
+    editState[campo] = null;
+    input.value = "";
+    renderInputRow(campo);
+  }
+
+  function renderInputRow(campo) {
+    const meta = admMeta[campo];
+    const input = document.getElementById(meta.inputId);
+    const addBtn = document.querySelector(`.adm-add-btn[data-campo="${campo}"]`);
+    const cancelBtn = document.getElementById(meta.cancelId);
+    const editing = editState[campo] !== null;
+
+    if (input) input.classList.toggle("editing", editing);
+    if (addBtn) {
+      addBtn.textContent = editing ? "✓" : "+";
+      addBtn.title = editing ? "Salvar edição" : "Adicionar";
+    }
+    if (cancelBtn) cancelBtn.style.display = editing ? "flex" : "none";
+  }
+
+  function resetarEdicaoGeral() {
+    Object.keys(editState).forEach(campo => {
+      editState[campo] = null;
+      renderInputRow(campo);
+    });
+  }
+
   function removerItem(campo, valor) {
     if (!confirm(`Remover "${valor}"? Lançamentos existentes não serão afetados.`)) return;
     const adm = getAdm();
     adm[campo] = adm[campo].filter(v => v !== valor);
     saveAdm(adm);
+    if (editState[campo] === valor) cancelarEdicao(campo);
     renderLists();
     populateFormSelects();
     sincronizarAutomaticamente();
@@ -1210,10 +1297,31 @@
       el.innerHTML = lista.map(v => `
         <div class="adm-item">
           <span>${esc(v)}</span>
-          <button class="adm-item-del" onclick="removerItem('${campo}','${v.replace(/'/g, "\\'")}')" title="Remover">✕</button>
+          <div class="adm-item-actions">
+            <button class="adm-item-btn adm-item-edit" onclick="editarItem('${campo}','${escAttr(v)}')" title="Editar">✏️</button>
+            <button class="adm-item-btn adm-item-del" onclick="removerItem('${campo}','${escAttr(v)}')" title="Remover">✕</button>
+          </div>
         </div>`).join("");
     });
   }
+
+  // Atribui data-campo aos botões de adicionar
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".adm-add-btn").forEach(btn => {
+      const parent = btn.closest(".adm-col");
+      if (!parent) return;
+      const input = parent.querySelector(".adm-input-row input");
+      if (!input) return;
+      // infere o campo pelo id do input
+      const map = {
+        "adm-professor-nome": "professores",
+        "adm-turma-nome": "turmas",
+        "adm-jogo-nome": "jogos",
+        "adm-jornada-nome": "jornadas",
+      };
+      btn.setAttribute("data-campo", map[input.id] || "");
+    });
+  });
 
   // Enter nos inputs da administração
   [
@@ -1224,7 +1332,8 @@
   ].forEach(([inputId, campo]) => {
     const el = document.getElementById(inputId);
     if (el) el.addEventListener("keydown", e => {
-      if (e.key === "Enter") { e.preventDefault(); adicionarItem(campo, inputId); }
+      if (e.key === "Enter") { e.preventDefault(); adicionarItem(campo); }
+      if (e.key === "Escape") { cancelarEdicao(campo); }
     });
   });
 
@@ -1263,6 +1372,7 @@
         if (!confirm(`Restaurar ${aulas.length} lançamento(s) e cadastros?\nIsso substituirá os dados atuais.`)) return;
         saveAulas(aulas);
         saveAdm(adm);
+        resetarEdicaoGeral();
         populateFormSelects();
         renderLists();
         renderStats();
@@ -1280,6 +1390,7 @@
     if (!confirm("Confirma? Esta ação não pode ser desfeita.")) return;
     saveAulas([]);
     saveAdm({ professores: [], turmas: [], jogos: [], jornadas: [] });
+    resetarEdicaoGeral();
     populateFormSelects();
     renderLists();
     renderStats();
@@ -1305,6 +1416,7 @@
     preencherFormConfig();
     populateFormSelects();
     renderStats();
+    renderLists();
     updateClock();
     atualizarStatusConexao();
     atualizarUltimaSync();
