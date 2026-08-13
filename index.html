@@ -50,9 +50,12 @@
       border-radius: 50%;
       background: #b0bec5;
       flex-shrink: 0;
+      transition: all 0.2s;
     }
     .sync-dot.connected { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
     .sync-dot.error { background: #ff5252; }
+    .sync-dot.syncing { background: #fbbc04; box-shadow: 0 0 6px #fbbc04; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     /* ============ TABS ============ */
     .tabs {
@@ -240,10 +243,7 @@
 
     .adm-input-row { display: flex; gap: 8px; }
     .adm-input-row input { flex: 1; font-size: 0.85rem; padding: 8px 10px; }
-    .adm-input-row input.editing {
-      border-color: #1a73e8;
-      background: #fffbe6;
-    }
+    .adm-input-row input.editing { border-color: #1a73e8; background: #fffbe6; }
     .adm-input-row button {
       flex-shrink: 0;
       width: 36px; height: 36px;
@@ -253,10 +253,7 @@
       display: flex; align-items: center; justify-content: center;
       transition: all 0.2s;
     }
-    .adm-cancel-btn {
-      background: #f1f3f4; color: #666;
-      font-size: 1rem;
-    }
+    .adm-cancel-btn { background: #f1f3f4; color: #666; font-size: 1rem; }
     .adm-cancel-btn:hover { background: #e0e0e0; }
 
     .adm-list { flex: 1; overflow-y: auto; max-height: 340px; display: flex; flex-direction: column; gap: 6px; }
@@ -418,6 +415,9 @@
       <button class="btn btn-primary" onclick="salvarAula()">💾 Salvar Lançamento</button>
       <button class="btn btn-secondary" onclick="limparForm()">🗑️ Limpar</button>
     </div>
+    <p style="font-size:0.82rem; color:#999; margin-top:14px;">
+      💡 Ao salvar, os dados serão gravados localmente e enviados automaticamente para o GitHub (se configurado).
+    </p>
   </div>
 </div>
 
@@ -569,7 +569,7 @@
       <div>
         <label>Caminho do arquivo de dados</label>
         <input id="git-path" type="text" class="input-mono" placeholder="data/conecta_aulas.json"/>
-        <div class="hint">Caminho dentro do repositório onde o JSON será salvo.</div>
+        <div class="hint">Pasta no repositório onde o JSON será salvo (ex.: <span class="mono">data/</span>).</div>
       </div>
     </div>
 
@@ -592,7 +592,7 @@
       <button class="btn btn-secondary" onclick="testarConexao()">🧪 Testar conexão</button>
       <button class="btn btn-purple" onclick="salvarConfiguracao()">💾 Salvar configuração</button>
       <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin:0 0 0 12px; font-size:0.86rem;">
-        <input type="checkbox" id="git-autosync" style="width:auto; margin:0;"/>
+        <input type="checkbox" id="git-autosync" style="width:auto; margin:0;" checked/>
         Sincronizar automaticamente ao salvar
       </label>
     </div>
@@ -707,17 +707,13 @@
   const KEY_LASTSYN = "conecta_last_sync";
 
   const GITHUB_API = "https://api.github.com";
-  const VERSAO = "4.1";
+  const VERSAO = "4.2";
 
   /* ────────────── HELPERS GERAIS ────────────── */
   function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
   function nowISO() { return new Date().toISOString(); }
-  function esc(s) {
-    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
-  function escAttr(s) {
-    return String(s).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function escAttr(s) { return String(s).replace(/\\/g, "\\\\").replace(/'/g, "\\'"); }
   function formatDate(d) {
     if (!d) return "";
     const [y, m, dia] = d.split("-");
@@ -728,7 +724,7 @@
     if (!el) return;
     el.textContent = msg;
     el.className = "alert alert-" + tipo + " show";
-    setTimeout(() => el.classList.remove("show"), 5000);
+    setTimeout(() => el.classList.remove("show"), 6000);
   }
 
   /* ────────────── CLOCK ────────────── */
@@ -768,18 +764,19 @@
       repo:   document.getElementById("git-repo").value.trim(),
       branch: document.getElementById("git-branch").value.trim() || "main",
       path:   document.getElementById("git-path").value.trim() || "data/conecta_aulas.json",
+      autosync: document.getElementById("git-autosync").checked
     };
   }
 
   function preencherFormConfig() {
     const cfg = getGitConfig();
-    if (!cfg) return;
-    document.getElementById("git-token").value  = cfg.token || "";
-    document.getElementById("git-owner").value  = cfg.owner || "";
-    document.getElementById("git-repo").value   = cfg.repo || "";
-    document.getElementById("git-branch").value = cfg.branch || "main";
-    document.getElementById("git-path").value   = cfg.path || "data/conecta_aulas.json";
-    document.getElementById("git-autosync").checked = !!cfg.autosync;
+    document.getElementById("git-token").value  = (cfg && cfg.token)  || "";
+    document.getElementById("git-owner").value  = (cfg && cfg.owner)  || "";
+    document.getElementById("git-repo").value   = (cfg && cfg.repo)   || "";
+    document.getElementById("git-branch").value = (cfg && cfg.branch) || "main";
+    document.getElementById("git-path").value   = (cfg && cfg.path)   || "data/conecta_aulas.json";
+    // autosync ligado por padrão
+    document.getElementById("git-autosync").checked = cfg ? (cfg.autosync !== false) : true;
   }
 
   /* ────────────── BASE64 (UTF-8 seguro) ────────────── */
@@ -824,6 +821,7 @@
       const user = await githubRequest("/user", cfg);
       const repo = await githubRequest(`/repos/${cfg.owner}/${cfg.repo}`, cfg);
       showAlert("alert-git", `✅ Conexão OK! Usuário: ${user.login} · Repositório: ${repo.full_name}`, "success");
+      atualizarStatusConexao();
     } catch (e) {
       showAlert("alert-git", "❌ Falha na conexão: " + e.message, "error");
     }
@@ -835,7 +833,6 @@
     if (!cfg.token || !cfg.owner || !cfg.repo) {
       return showAlert("alert-git", "Preencha Token, Owner e Repositório.", "error");
     }
-    cfg.autosync = document.getElementById("git-autosync").checked;
     saveGitConfig(cfg);
     atualizarStatusConexao();
     showAlert("alert-git", "✅ Configuração salva com sucesso!", "success");
@@ -890,7 +887,7 @@
         const existing = await githubRequest(`/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}${refParam}`, cfg);
         sha = existing.sha;
       } catch (e) {
-        // arquivo não existe — será criado
+        // arquivo ainda não existe — será criado
       }
 
       const body = {
@@ -911,6 +908,35 @@
     } catch (e) {
       if (!silent) showAlert("alert-sync", "❌ Erro ao enviar: " + e.message, "error");
       throw e;
+    }
+  }
+
+  /* ────────────── AUTO-SYNC (salva no GitHub após cada alteração) ────────────── */
+  async function sincronizarAutomaticamente() {
+    const cfg = getGitConfig();
+    const dot = document.getElementById("sync-dot");
+    const label = document.getElementById("sync-label");
+
+    if (!cfg || !cfg.token) {
+      if (label) label.textContent = "GitHub não configurado";
+      if (dot) dot.className = "sync-dot";
+      return;
+    }
+
+    const auto = document.getElementById("git-autosync");
+    if (auto && !auto.checked) return; // usuário desativou
+
+    if (label) label.textContent = "Sincronizando…";
+    if (dot) dot.className = "sync-dot syncing";
+
+    try {
+      await enviarDados(true);
+      if (label) label.textContent = "✓ Salvo no GitHub " + new Date().toLocaleTimeString("pt-BR");
+      if (dot) dot.className = "sync-dot connected";
+    } catch (e) {
+      if (label) label.textContent = "✗ Erro ao salvar no GitHub";
+      if (dot) dot.className = "sync-dot error";
+      console.warn("Auto-sync falhou:", e.message);
     }
   }
 
@@ -1006,7 +1032,7 @@
     populateSelect("edit-jornada", adm.jornadas, aula.jornada);
   }
 
-  /* ────────────── SALVAR AULA ────────────── */
+  /* ────────────── SALVAR AULA (novo lançamento) ────────────── */
   function salvarAula() {
     const professor = document.getElementById("f-professor").value;
     const turma = document.getElementById("f-turma").value;
@@ -1034,7 +1060,7 @@
     });
     saveAulas(aulas);
     limparForm();
-    showAlert("alert-lancar", "✅ Lançamento salvo com sucesso!", "success");
+    showAlert("alert-lancar", "✅ Lançamento salvo! Enviando para o GitHub…", "success");
     sincronizarAutomaticamente();
   }
 
@@ -1044,14 +1070,6 @@
     const n = new Date();
     document.getElementById("f-data").value = n.toISOString().slice(0, 10);
     document.getElementById("f-hora").value = n.toTimeString().slice(0, 5);
-  }
-
-  async function sincronizarAutomaticamente() {
-    const cfg = getGitConfig();
-    const auto = document.getElementById("git-autosync");
-    if (!cfg || !auto || !auto.checked) return;
-    try { await enviarDados(true); console.log("Auto-sync concluído."); }
-    catch (e) { console.warn("Auto-sync falhou:", e.message); }
   }
 
   /* ────────────── STATS ────────────── */
@@ -1153,6 +1171,7 @@
     const comentarios = document.getElementById("edit-comentarios").value.trim();
     if (!professor || !turma || !jornada || !jogo || !data || !hora || !atividade)
       return alert("Preencha todos os campos obrigatórios (*).");
+
     saveAulas(getAulas().map(a => a.id !== id ? a : {
       ...a, professor, turma, jornada, jogo_aplicado: jogo,
       data, hora, atividade_executada: atividade, comentarios, updated_at: nowISO()
@@ -1161,6 +1180,7 @@
     populateFiltros();
     renderTabela();
     renderStats();
+    showAlert("alert-lancar", "✅ Edição salva! Enviando para o GitHub…", "success");
     sincronizarAutomaticamente();
   }
 
@@ -1180,13 +1200,7 @@
     jornadas:    { listId: "list-jornadas",    countId: "count-jornadas",    alertId: "alert-adm-jornadas",    inputId: "adm-jornada-nome",    cancelId: "btn-cancel-jornadas"    },
   };
 
-  // Guarda o valor original quando um item está em modo de edição
-  const editState = {
-    professores: null,
-    turmas: null,
-    jogos: null,
-    jornadas: null,
-  };
+  const editState = { professores: null, turmas: null, jogos: null, jornadas: null };
 
   function adicionarItem(campo) {
     const meta = admMeta[campo];
@@ -1198,19 +1212,12 @@
 
     const adm = getAdm();
 
-    // MODO EDIÇÃO: atualiza o item existente
     if (editState[campo] !== null) {
       const original = editState[campo];
-      if (valor === original) {
-        cancelarEdicao(campo);
-        return;
-      }
-      if (adm[campo].includes(valor))
-        return showAlert(alertId, "Já existe um item com este nome.", "warning");
-
+      if (valor === original) { cancelarEdicao(campo); return; }
+      if (adm[campo].includes(valor)) return showAlert(alertId, "Já existe um item com este nome.", "warning");
       const idx = adm[campo].indexOf(original);
       if (idx === -1) { cancelarEdicao(campo); return; }
-
       adm[campo][idx] = valor;
       saveAdm(adm);
       cancelarEdicao(campo);
@@ -1221,9 +1228,7 @@
       return;
     }
 
-    // MODO ADIÇÃO: insere novo item
-    if (adm[campo].includes(valor))
-      return showAlert(alertId, "Este item já está cadastrado.", "warning");
+    if (adm[campo].includes(valor)) return showAlert(alertId, "Este item já está cadastrado.", "warning");
 
     adm[campo].push(valor);
     saveAdm(adm);
@@ -1305,14 +1310,12 @@
     });
   }
 
-  // Atribui data-campo aos botões de adicionar
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".adm-add-btn").forEach(btn => {
       const parent = btn.closest(".adm-col");
       if (!parent) return;
       const input = parent.querySelector(".adm-input-row input");
       if (!input) return;
-      // infere o campo pelo id do input
       const map = {
         "adm-professor-nome": "professores",
         "adm-turma-nome": "turmas",
@@ -1323,7 +1326,6 @@
     });
   });
 
-  // Enter nos inputs da administração
   [
     ["adm-professor-nome", "professores"],
     ["adm-turma-nome", "turmas"],
@@ -1343,7 +1345,7 @@
     if (!aulas.length) return alert("Nenhum dado para exportar.");
     const headers = ["id", "professor", "turma", "jornada", "jogo_aplicado", "data", "hora", "atividade_executada", "comentarios", "created_at", "updated_at"];
     const rows = [headers.join(";"),
-    ...aulas.map(a => headers.map(h => `"${(a[h] || "").toString().replace(/"/g, '""')}"`).join(";"))
+      ...aulas.map(a => headers.map(h => `"${(a[h] || "").toString().replace(/"/g, '""')}"`).join(";"))
     ];
     download("aulas_conecta.csv", rows.join("\n"), "text/csv;charset=utf-8;");
   }
@@ -1378,6 +1380,7 @@
         renderStats();
         showAlert("alert-backup", `✅ ${aulas.length} lançamento(s) e cadastros restaurados!`, "success");
         document.getElementById("import-file").value = "";
+        sincronizarAutomaticamente();
       } catch {
         showAlert("alert-backup", "❌ Arquivo inválido ou corrompido.", "error");
       }
@@ -1395,6 +1398,7 @@
     renderLists();
     renderStats();
     showAlert("alert-backup", "Todos os dados foram apagados.", "warning");
+    sincronizarAutomaticamente();
   }
 
   /* ────────────── DOWNLOAD ────────────── */
