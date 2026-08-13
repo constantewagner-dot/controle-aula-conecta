@@ -1,16 +1,21 @@
 {
   "versao": "4.1",
-  "atualizado_em": "2026-08-13T17:50:32.522Z",
+  "atualizado_em": "2026-08-13T17:52:13.622Z",
   "aulas": [],
   "adm": {
     "professores": [
       "Jenny",
       "Denize"
     ],
-    "turmas": [],
-    "jogos": [
-      "Uno"
+    "turmas": [
+      "Manhã"
     ],
-    "jornadas": []
+    "jogos": [
+      "Uno",
+      "Detetive"
+    ],
+    "jornadas": [
+      "Jornada 1 – Introdução"
+    ]
   }
 }
