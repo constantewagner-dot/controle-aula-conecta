@@ -1,10 +1,11 @@
 {
-  "versao": "4.0",
-  "atualizado_em": "2026-08-13T17:07:57.288Z",
+  "versao": "4.1",
+  "atualizado_em": "2026-08-13T17:50:32.522Z",
   "aulas": [],
   "adm": {
     "professores": [
-      "Jenny"
+      "Jenny",
+      "Denize"
     ],
     "turmas": [],
     "jogos": [
