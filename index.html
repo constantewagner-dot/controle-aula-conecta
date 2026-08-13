@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Controle de Aula – Conecta</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f0f2f5; color: #333;
+      min-height: 100vh;
+    }
+
+    /* ============ TELAS DE LOGIN / SETUP ============ */
+    .screen {
+      display: none;
+      min-height: 100vh;
+    }
+    .screen.active { display: flex; }
+
+    .auth-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(135deg, #e8f0fe 0%, #f0f2f5 30%, #fff3e0 70%, #e8f5e9 100%);
+    }
+
+    .auth-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 40px 36px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .auth-brand .icon-brand {
+      font-size: 3rem;
+      margin-bottom: 8px;
+    }
+    .auth-brand h1 {
+      font-size: 1.3rem;
+      color: #1a73e8;
+      margin-bottom: 4px;
+    }
+    .auth-brand p {
+      font-size: 0.88rem;
+      color: #999;
+    }
+
+    .auth-card label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    .auth-card input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      font-size: 0.94rem;
+      outline: none;
+      background: #fafafa;
+      margin-bottom: 14px;
+      transition: border 0.2s;
+    }
+    .auth-card input:focus {
+      border-color: #1a73e8;
+      background: #fff;
+    }
+
+    .auth-card .btn-full {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 6px;
+      transition: all 0.2s;
+    }
+
+    .auth-alert {
+      display: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+    }
+    .auth-alert.show { display: block; }
+    .auth-alert.error { background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb; }
+    .auth-alert.success { background: #e6f4ea; color: #1e7e34; border: 1px solid #b7dfbf; }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.84rem;
+      color: #999;
+    }
+
+    /* ============ APP HEADER & TABS ============ */
+    .app-header {
+      background: #1a73e8;
+      color: white;
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .app-header h1 { font-size: 1.3rem; }
+    .app-header .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.88rem;
+    }
+    .header-right .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.95;
+    }
+    .header-right .user-role {
+      font-size: 0.72rem;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-logout {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.84rem;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.3); }
+
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-bottom: 2px solid #e0e0e0;
+      padding: 0 32px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 14px 22px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.92rem;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+    .tab-btn.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 600; }
+    .tab-btn:hover { color: #1a73e8; }
+    .tab-btn.admin { color: #e67e00; }
+    .tab-btn.admin.active { color: #e67e00; border-bottom-color: #e67e00; }
+
+    .tab-content { display: none; padding: 32px; max-width: 1200px; margin: 0 auto; }
+    .tab-content.active { display: block; }
+
+    /* ============ CARDS ============ */
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      margin-bottom: 24px;
+    }
+    .card h2 { font-size: 1.1rem; color: #1a73e8; margin-bottom: 20px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+
+    label:not(.auth-card label) {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border 0.2s;
+      background: #fafafa;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #1a73e8; background: #fff; }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* ============ BUTTONS ============ */
+    .btn {
+      padding: 10px 22px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-primary   { background: #1a73e8; color: #fff; }
+    .btn-primary:hover { background: #1558b0; }
+    .btn-success   { background: #34a853; color: #fff; }
+    .btn-success:hover { background: #256e3a; }
+    .btn-danger    { background: #ea4335; color: #fff; }
+    .btn-danger:hover { background: #b5281d; }
+    .btn-secondary { background: #f1f3f4; color: #333; border: 1px solid #d0d0d0; }
+    .btn-secondary:hover { background: #e0e0e0; }
+    .btn-warning   { background: #fbbc04; color: #333; }
+    .btn-warning:hover { background: #e0a800; }
+    .btn-orange    { background: #e67e00; color: #fff; }
+    .btn-orange:hover { background: #b86200; }
+    .btn-sm { padding: 6px 12px; font-size: 0.80rem; }
+    .btn-xs { padding: 3px 8px; font-size: 0.74rem; border-radius: 4px; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+
+    .btn-disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* ============ ALERTS ============ */
+    .alert {
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      display: none;
+      margin-top: 8px;
+    }
+    .alert.show { display: block; }
+    .alert-success { background: #e6f4ea; color: #1e7e34; border: 1px solid #b7dfbf; }
+    .alert-error   { background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb; }
+    .alert-warning { background: #fff8e1; color: #856404; border: 1px solid #ffe082; }
+
+    /* ============ FILTERS & TABLE ============ */
+    .filters { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead th { background: #1a73e8; color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; }
+    tbody tr:nth-child(even) { background: #f8f9ff; }
+    tbody tr:hover { background: #e8f0fe; }
+    td { padding: 9px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+    .td-actions { display: flex; gap: 6px; }
+
+    /* ============ EMPTY STATE ============ */
+    .empty-state { text-align: center; padding: 40px; color: #bbb; }
+
+    /* ============ MODALS ============ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      padding: 32px;
+      width: 90%;
+      max-width: 720px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .modal h2 { font-size: 1.1rem; color: #1a73e8; margin-bottom: 20px; }
+    .modal-close { float: right; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #999; margin-top: -6px; }
+
+    /* ============ STATS ============ */
+    .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .stat-card { background: #fff; border-radius: 8px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+    .stat-card .num { font-size: 1.8rem; font-weight: 700; color: #1a73e8; }
+    .stat-card .lbl { font-size: 0.78rem; color: #888; margin-top: 4px; }
+
+    /* ============ ADMIN COLUMNS ============ */
+    .adm-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .adm-col {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .adm-col-header {
+      padding: 16px 20px;
+      border-bottom: 2px solid #e8eaf6;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .adm-col-header .icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .adm-col-header .col-title { font-size: 0.92rem; font-weight: 700; color: #333; }
+    .adm-col-header .col-count {
+      margin-left: auto;
+      background: #e8eaf6;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .adm-col-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .adm-input-row { display: flex; gap: 8px; }
+    .adm-input-row input { flex: 1; font-size: 0.85rem; padding: 8px 10px; }
+    .adm-input-row button {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      border: none; border-radius: 6px;
+      cursor: pointer; font-size: 1.3rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .adm-list { flex: 1; overflow-y: auto; max-height: 340px; display: flex; flex-direction: column; gap: 6px; }
+    .adm-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 7px;
+      font-size: 0.86rem;
+      color: #333;
+    }
+    .adm-item span { flex: 1; word-break: break-word; }
+    .adm-item-del {
+      flex-shrink: 0;
+      width: 26px; height: 26px;
+      border: none; border-radius: 5px;
+      background: transparent;
+      color: #bbb;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      margin-left: 6px;
+    }
+    .adm-item-del:hover { background: #fdecea; color: #ea4335; }
+    .adm-empty { text-align: center; padding: 24px 12px; color: #bbb; font-size: 0.83rem; }
+
+    /* Cores por coluna */
+    .col-prof  .adm-col-header { background: #e8f5e9; border-color: #c8e6c9; }
+    .col-prof  .adm-col-header .icon { background: #c8e6c9; }
+    .col-prof  .adm-col-header .col-count { background: #c8e6c9; color: #2e7d32; }
+    .col-prof  .adm-input-row button { background: #34a853; color: #fff; }
+    .col-prof  .adm-input-row button:hover { background: #256e3a; }
+    .col-prof  .adm-item { background: #f1f8f3; border: 1px solid #c8e6c9; }
+    .col-prof  .adm-item:hover { background: #e8f5e9; }
+
+    .col-turma .adm-col-header { background: #e3f2fd; border-color: #bbdefb; }
+    .col-turma .adm-col-header .icon { background: #bbdefb; }
+    .col-turma .adm-col-header .col-count { background: #bbdefb; color: #1565c0; }
+    .col-turma .adm-input-row button { background: #1a73e8; color: #fff; }
+    .col-turma .adm-input-row button:hover { background: #1558b0; }
+    .col-turma .adm-item { background: #f1f7ff; border: 1px solid #bbdefb; }
+    .col-turma .adm-item:hover { background: #e3f2fd; }
+
+    .col-jogo  .adm-col-header { background: #fff3e0; border-color: #ffe0b2; }
+    .col-jogo  .adm-col-header .icon { background: #ffe0b2; }
+    .col-jogo  .adm-col-header .col-count { background: #ffe0b2; color: #e65100; }
+    .col-jogo  .adm-input-row button { background: #e67e00; color: #fff; }
+    .col-jogo  .adm-input-row button:hover { background: #b86200; }
+    .col-jogo  .adm-item { background: #fffaf3; border: 1px solid #ffe0b2; }
+    .col-jogo  .adm-item:hover { background: #fff3e0; }
+
+    .col-jornada .adm-col-header { background: #f3e5f5; border-color: #e1bee7; }
+    .col-jornada .adm-col-header .icon { background: #e1bee7; }
+    .col-jornada .adm-col-header .col-count { background: #e1bee7; color: #6a1b9a; }
+    .col-jornada .adm-input-row button { background: #8e24aa; color: #fff; }
+    .col-jornada .adm-input-row button:hover { background: #6a1b9a; }
+    .col-jornada .adm-item { background: #fdf6ff; border: 1px solid #e1bee7; }
+    .col-jornada .adm-item:hover { background: #f3e5f5; }
+
+    /* ============ USERS TABLE ============ */
+    .users-table thead th { background: #5c6bc0; }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+    .badge-admin { background: #e8eaf6; color: #3f51b5; }
+    .badge-user  { background: #e0e0e0; color: #666; }
+    .badge-active   { background: #e6f4ea; color: #1e7e34; }
+    .badge-inactive { background: #fdecea; color: #b71c1c; }
+
+    .tooltip-wrap {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip-wrap .tooltip-text {
+      visibility: hidden;
+      opacity: 0;
+      background: #333;
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      transition: opacity 0.2s;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .tooltip-wrap:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 900px) {
+      .adm-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .adm-grid { grid-template-columns: 1fr; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .tab-btn { padding: 10px 12px; font-size: 0.82rem; }
+      .app-header { padding: 12px 16px; }
+      .tabs { padding: 0 12px; }
+      .tab-content { padding: 20px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== TELA 1: SETUP (primeiro acesso) ==================== -->
+<div id="screen-setup" class="screen">
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="icon-brand">📚</div>
+        <h1>Controle de Aula – Conecta</h1>
+        <p>Configure sua conta de administrador</p>
+      </div>
+      <div id="alert-setup" class="auth-alert"></div>
+      <label>Nome completo</label>
+      <input id="setup-nome" type="text" placeholder="Seu nome completo" autocomplete="name"/>
+      <label>Nome de usuário</label>
+      <input id="setup-user" type="text" placeholder="Usuário para login" autocomplete="off"/>
+      <label>Senha</label>
+      <input id="setup-senha" type="password" placeholder="Mínimo 4 caracteres" autocomplete="new-password"/>
+      <label>Confirmar senha</label>
+      <input id="setup-senha2" type="password" placeholder="Repita a senha" autocomplete="new-password"/>
+      <button class="btn btn-primary btn-full" onclick="criarAdmin()">🔐 Criar conta e acessar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TELA 2: LOGIN ==================== -->
+<div id="screen-login" class="screen">
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="icon-brand">📚</div>
+        <h1>Controle de Aula – Conecta</h1>
+        <p>Faça login para continuar</p>
+      </div>
+      <div id="alert-login" class="auth-alert"></div>
+      <label>Usuário</label>
+      <input id="login-user" type="text" placeholder="Seu nome de usuário" autocomplete="username"/>
+      <label>Senha</label>
+      <input id="login-senha" type="password" placeholder="Sua senha" autocomplete="current-password"/>
+      <button class="btn btn-primary btn-full" onclick="fazerLogin()">🔑 Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TELA 3: APLICATIVO ==================== -->
+<div id="screen-app" class="screen" style="display:block; flex-direction:column;">
+
+  <header class="app-header">
+    <h1>📚 Controle de Aula – Conecta</h1>
+    <div class="header-right">
+      <div class="user-info">
+        <span>👤 <strong id="header-nome"></strong></span>
+        <span class="user-role" id="header-role"></span>
+      </div>
+      <span id="datetime"></span>
+      <button class="btn-logout" onclick="logout()">🚪 Sair</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('lancar',this)">➕ Lançar Aula</button>
+    <button class="tab-btn"        onclick="switchTab('consultar',this)">🔎 Consultar / Editar</button>
+    <button class="tab-btn"        onclick="switchTab('backup',this)">💾 Backup</button>
+    <button class="tab-btn admin"  onclick="switchTab('admin',this)">⚙️ Administração</button>
+  </div>
+
+  <!-- ============ TAB 1: LANÇAR ============ -->
+  <div id="tab-lancar" class="tab-content active">
+    <div class="card">
+      <h2>➕ Novo Lançamento</h2>
+      <div id="alert-lancar" class="alert"></div>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div>
+          <label>Professor *</label>
+          <select id="f-professor"><option value="">Selecione...</option></select>
+        </div>
+        <div>
+          <label>Turma *</label>
+          <select id="f-turma"><option value="">Selecione...</option></select>
+        </div>
+        <div>
+          <label>Jornada do Conecta *</label>
+          <select id="f-jornada"><option value="">Selecione...</option></select>
+        </div>
+      </div>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div>
+          <label>Jogo Aplicado *</label>
+          <select id="f-jogo"><option value="">Selecione...</option></select>
+        </div>
+        <div>
+          <label>Data *</label>
+          <input id="f-data" type="date"/>
+        </div>
+        <div>
+          <label>Hora *</label>
+          <input id="f-hora" type="time"/>
+        </div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label>Atividade Executada *</label>
+        <textarea id="f-atividade" placeholder="Descreva objetivo, passo a passo breve e como foi conduzida."></textarea>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label>Comentários do Professor (opcional)</label>
+        <textarea id="f-comentarios" placeholder="Observações, engajamento, dificuldades, devolutivas, próximos passos..."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="salvarAula()">💾 Salvar Lançamento</button>
+        <button class="btn btn-secondary" onclick="limparForm()">🗑️ Limpar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: CONSULTAR ============ -->
+  <div id="tab-consultar" class="tab-content">
+    <div class="stats" id="stats-area"></div>
+    <div class="card">
+      <h2>🔎 Filtros</h2>
+      <div class="filters">
+        <div>
+          <label>Professor</label>
+          <select id="fil-professor"><option value="">Todos</option></select>
+        </div>
+        <div>
+          <label>Turma</label>
+          <select id="fil-turma"><option value="">Todas</option></select>
+        </div>
+        <div>
+          <label>Jornada do Conecta</label>
+          <select id="fil-jornada"><option value="">Todas</option></select>
+        </div>
+        <div>
+          <label>Jogo Aplicado</label>
+          <select id="fil-jogo"><option value="">Todos</option></select>
+        </div>
+        <div>
+          <label>Data início</label>
+          <input id="fil-data-ini" type="date"/>
+        </div>
+        <div>
+          <label>Data fim</label>
+          <input id="fil-data-fim" type="date"/>
+        </div>
+        <div>
+          <label>Busca livre</label>
+          <input id="fil-texto" type="text" placeholder="Atividade, comentários..."/>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="renderTabela()">🔍 Filtrar</button>
+        <button class="btn btn-secondary" onclick="limparFiltros()">✖ Limpar filtros</button>
+        <button class="btn btn-success" onclick="exportarCSV()">📥 Exportar CSV</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Registros</h2>
+      <div id="tabela-area"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3: BACKUP ============ -->
+  <div id="tab-backup" class="tab-content">
+    <div class="card">
+      <h2>💾 Backup e Restauração de Dados</h2>
+      <p style="color:#666; margin-bottom:24px; font-size:0.93rem;">
+        Os dados ficam salvos no <strong>localStorage</strong> do navegador.
+        O backup inclui lançamentos, cadastros e usuários.
+      </p>
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size:0.95rem; margin-bottom:10px;">📤 Exportar Backup</h3>
+          <p style="font-size:0.85rem; color:#666; margin-bottom:14px;">Baixa tudo em um arquivo <code>.json</code>.</p>
+          <button class="btn btn-primary" onclick="exportarJSON()">⬇️ Baixar backup.json</button>
+        </div>
+        <div>
+          <h3 style="font-size:0.95rem; margin-bottom:10px;">📥 Importar / Restaurar</h3>
+          <p style="font-size:0.85rem; color:#666; margin-bottom:10px;">Carrega um <code>.json</code> exportado anteriormente.</p>
+          <input type="file" id="import-file" accept=".json" style="margin-bottom:10px;"/>
+          <button class="btn btn-success" onclick="importarJSON()">⬆️ Restaurar backup</button>
+          <div id="alert-backup" class="alert"></div>
+        </div>
+      </div>
+      <hr style="margin:24px 0; border:none; border-top:1px solid #eee;"/>
+      <h3 style="font-size:0.95rem; margin-bottom:10px; color:#ea4335;">⚠️ Zona de perigo</h3>
+      <p style="font-size:0.85rem; color:#666; margin-bottom:14px;">Apaga <strong>todos</strong> os registros, cadastros e usuários permanentemente.</p>
+      <button class="btn btn-danger" onclick="confirmarLimpar()">🗑️ Apagar todos os dados</button>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4: ADMINISTRAÇÃO ============ -->
+  <div id="tab-admin" class="tab-content">
+    <div style="margin-bottom:20px;">
+      <h2 style="font-size:1.15rem; color:#e67e00; margin-bottom:4px;">⚙️ Administração</h2>
+      <p style="color:#999; font-size:0.87rem;">Gerencie os itens disponíveis nos campos de seleção do formulário.</p>
+    </div>
+
+    <!-- USUÁRIOS (apenas admin) -->
+    <div id="admin-users-section" class="card" style="display:none;">
+      <h2 style="color:#5c6bc0;">👥 Gerenciar Usuários</h2>
+      <p style="font-size:0.82rem; color:#888; margin-bottom:16px;">
+        Usuários inativos não conseguem fazer login. Apenas administradores podem gerenciar usuários.
+      </p>
+      <div class="btn-row" style="margin-top:0; margin-bottom:16px;">
+        <button class="btn btn-primary" onclick="abrirModalUser()" style="background:#5c6bc0;">➕ Novo Usuário</button>
+      </div>
+      <div id="alert-adm-users" class="alert"></div>
+      <table class="users-table" style="margin-top:12px;">
+        <thead>
+          <tr>
+            <th>Nome</th><th>Usuário</th><th>Função</th><th>Status</th><th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="users-tbody"></tbody>
+      </table>
+      <div id="users-empty" class="empty-state" style="display:none;"><div style="font-size:2.5rem;">👤</div><p>Nenhum usuário cadastrado.</p></div>
+    </div>
+
+    <!-- COLUNAS DE CADASTRO -->
+    <div class="adm-grid">
+      <!-- Professores -->
+      <div class="adm-col col-prof">
+        <div class="adm-col-header">
+          <div class="icon">👤</div>
+          <span class="col-title">Professores</span>
+          <span class="col-count" id="count-professores">0</span>
+        </div>
+        <div class="adm-col-body">
+          <div class="adm-input-row">
+            <input id="adm-professor-nome" type="text" placeholder="Nome do professor…"/>
+            <button onclick="adicionarItem('professores','adm-professor-nome')" title="Adicionar">+</button>
+          </div>
+          <div id="alert-adm-professores" class="alert"></div>
+          <div class="adm-list" id="list-professores"></div>
+        </div>
+      </div>
+      <!-- Turmas -->
+      <div class="adm-col col-turma">
+        <div class="adm-col-header">
+          <div class="icon">🏫</div>
+          <span class="col-title">Turmas</span>
+          <span class="col-count" id="count-turmas">0</span>
+        </div>
+        <div class="adm-col-body">
+          <div class="adm-input-row">
+            <input id="adm-turma-nome" type="text" placeholder="Nome da turma…"/>
+            <button onclick="adicionarItem('turmas','adm-turma-nome')" title="Adicionar">+</button>
+          </div>
+          <div id="alert-adm-turmas" class="alert"></div>
+          <div class="adm-list" id="list-turmas"></div>
+        </div>
+      </div>
+      <!-- Jogos -->
+      <div class="adm-col col-jogo">
+        <div class="adm-col-header">
+          <div class="icon">🎲</div>
+          <span class="col-title">Jogos Aplicados</span>
+          <span class="col-count" id="count-jogos">0</span>
+        </div>
+        <div class="adm-col-body">
+          <div class="adm-input-row">
+            <input id="adm-jogo-nome" type="text" placeholder="Nome do jogo…"/>
+            <button onclick="adicionarItem('jogos','adm-jogo-nome')" title="Adicionar">+</button>
+          </div>
+          <div id="alert-adm-jogos" class="alert"></div>
+          <div class="adm-list" id="list-jogos"></div>
+        </div>
+      </div>
+      <!-- Jornadas -->
+      <div class="adm-col col-jornada">
+        <div class="adm-col-header">
+          <div class="icon">🗺️</div>
+          <span class="col-title">Jornadas do Conecta</span>
+          <span class="col-count" id="count-jornadas">0</span>
+        </div>
+        <div class="adm-col-body">
+          <div class="adm-input-row">
+            <input id="adm-jornada-nome" type="text" placeholder="Nome da jornada…"/>
+            <button onclick="adicionarItem('jornadas','adm-jornada-nome')" title="Adicionar">+</button>
+          </div>
+          <div id="alert-adm-jornadas" class="alert"></div>
+          <div class="adm-list" id="list-jornadas"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: EDIÇÃO DE AULA ============ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+    <h2>✏️ Editar Lançamento</h2>
+    <input type="hidden" id="edit-id"/>
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div>
+        <label>Professor *</label>
+        <select id="edit-professor"></select>
+      </div>
+      <div>
+        <label>Turma *</label>
+        <select id="edit-turma"></select>
+      </div>
+      <div>
+        <label>Jornada do Conecta *</label>
+        <select id="edit-jornada"></select>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div>
+        <label>Jogo Aplicado *</label>
+        <select id="edit-jogo"></select>
+      </div>
+      <div>
+        <label>Data *</label>
+        <input id="edit-data" type="date"/>
+      </div>
+      <div>
+        <label>Hora *</label>
+        <input id="edit-hora" type="time"/>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Atividade Executada *</label>
+      <textarea id="edit-atividade"></textarea>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Comentários do Professor (opcional)</label>
+      <textarea id="edit-comentarios"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="salvarEdicao()">💾 Salvar edição</button>
+      <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: USUÁRIO ============ -->
+<div class="modal-overlay" id="modal-user-overlay">
+  <div class="modal" style="max-width:480px;">
+    <button class="modal-close" onclick="fecharModalUser()">✕</button>
+    <h2 id="modal-user-title" style="color:#5c6bc0;">➕ Novo Usuário</h2>
+    <input type="hidden" id="user-edit-id"/>
+    <div id="alert-modal-user" class="alert"></div>
+    <label>Nome completo *</label>
+    <input id="user-nome" type="text" placeholder="Nome completo do usuário"/>
+    <label>Nome de usuário *</label>
+    <input id="user-username" type="text" placeholder="Login do usuário"/>
+    <label>Função *</label>
+    <select id="user-role">
+      <option value="user">Usuário</option>
+      <option value="admin">Administrador</option>
+    </select>
+    <label>Nova senha <span id="senha-optional" style="font-weight:400;color:#999;">*</span></label>
+    <input id="user-senha" type="password" placeholder="Mínimo 4 caracteres"/>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="salvarUsuario()" style="background:#5c6bc0;">💾 Salvar</button>
+      <button class="btn btn-secondary" onclick="fecharModalUser()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+  /* ──────────────────────────────────────
+     STORAGE KEYS
+     ────────────────────────────────────── */
+  const KEY_AULAS   = "conecta_aulas_v2";
+  const KEY_ADM     = "conecta_adm_v2";
+  const KEY_USERS   = "conecta_users_v1";
+  const KEY_SESSION = "conecta_session";
+
+  /* ──────────────────────────────────────
+     SESSÃO
+     ────────────────────────────────────── */
+  let currentUser = null;
+
+  function getUsers() {
+    try { return JSON.parse(localStorage.getItem(KEY_USERS)) || []; }
+    catch { return []; }
+  }
+  function saveUsers(u) { localStorage.setItem(KEY_USERS, JSON.stringify(u)); }
+
+  function isAdmin() {
+    return currentUser && currentUser.role === "admin";
+  }
+
+  /* ──────────────────────────────────────
+     HASH DE SENHA (SHA-256 via Web Crypto)
+     ────────────────────────────────────── */
+  async function hashPassword(password) {
+    const enc = new TextEncoder();
+    const data = enc.encode(password);
+    const hashBuf = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hashBuf))
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
+  /* ──────────────────────────────────────
+     EXIBIR TELA
+     ────────────────────────────────────── */
+  function showScreen(name) {
+    ["screen-setup", "screen-login", "screen-app"].forEach(id => {
+      document.getElementById(id).classList.remove("active");
+    });
+    const el = document.getElementById("screen-" + name);
+    el.classList.add("active");
+    if (name === "app") {
+      document.getElementById("screen-app").style.display = "flex";
+    } else {
+      document.getElementById("screen-app").style.display = "none";
+    }
+  }
+
+  /* ──────────────────────────────────────
+     INICIALIZAÇÃO
+     ────────────────────────────────────── */
+  async function init() {
+    // Checa sessão ativa
+    const sessionId = sessionStorage.getItem(KEY_SESSION);
+    if (sessionId) {
+      const users = getUsers();
+      const user = users.find(u => u.id === sessionId && u.active);
+      if (user) {
+        currentUser = user;
+        showScreen("app");
+        initApp();
+        return;
+      }
+      sessionStorage.removeItem(KEY_SESSION);
+    }
+
+    // Sem sessão → setup ou login
+    const users = getUsers();
+    if (users.length === 0) {
+      showScreen("setup");
+    } else {
+      showScreen("login");
+      document.getElementById("login-user").focus();
+    }
+  }
+
+  /* ──────────────────────────────────────
+     SETUP: CRIAR PRIMEIRO ADMIN
+     ────────────────────────────────────── */
+  async function criarAdmin() {
+    const alertEl  = document.getElementById("alert-setup");
+    const nome     = document.getElementById("setup-nome").value.trim();
+    const username = document.getElementById("setup-user").value.trim();
+    const senha    = document.getElementById("setup-senha").value;
+    const senha2   = document.getElementById("setup-senha2").value;
+
+    if (!nome)     return showAuthAlert(alertEl, "Preencha o nome completo.", "error");
+    if (!username) return showAuthAlert(alertEl, "Preencha o nome de usuário.", "error");
+    if (username.length < 3) return showAuthAlert(alertEl, "Usuário deve ter pelo menos 3 caracteres.", "error");
+    if (senha.length < 4) return showAuthAlert(alertEl, "Senha deve ter pelo menos 4 caracteres.", "error");
+    if (senha !== senha2) return showAuthAlert(alertEl, "As senhas não conferem.", "error");
+
+    // Verifica se usuário já existe
+    const users = getUsers();
+    if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+      return showAuthAlert(alertEl, "Este nome de usuário já existe.", "error");
+    }
+
+    const hash = await hashPassword(senha);
+    const newUser = {
+      id: genId(),
+      nome,
+      username,
+      passwordHash: hash,
+      role: "admin",
+      active: true,
+      created_at: nowISO()
+    };
+    users.push(newUser);
+    saveUsers(users);
+
+    // Loga automaticamente
+    sessionStorage.setItem(KEY_SESSION, newUser.id);
+    currentUser = newUser;
+    showScreen("app");
+    initApp();
+  }
+
+  /* ──────────────────────────────────────
+     LOGIN
+     ────────────────────────────────────── */
+  async function fazerLogin() {
+    const alertEl  = document.getElementById("alert-login");
+    const username = document.getElementById("login-user").value.trim();
+    const senha    = document.getElementById("login-senha").value;
+
+    if (!username || !senha) return showAuthAlert(alertEl, "Preencha usuário e senha.", "error");
+
+    const users = getUsers();
+    const user  = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+    if (!user) return showAuthAlert(alertEl, "Usuário não encontrado.", "error");
+    if (!user.active) return showAuthAlert(alertEl, "Usuário desativado. Contate o administrador.", "error");
+
+    const hash = await hashPassword(senha);
+    if (hash !== user.passwordHash) return showAuthAlert(alertEl, "Senha incorreta.", "error");
+
+    sessionStorage.setItem(KEY_SESSION, user.id);
+    currentUser = user;
+    showScreen("app");
+    initApp();
+  }
+
+  /* ──────────────────────────────────────
+     LOGOUT
+     ────────────────────────────────────── */
+  function logout() {
+    sessionStorage.removeItem(KEY_SESSION);
+    currentUser = null;
+    // Reseta UI
+    document.querySelectorAll(".tab-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
+    document.querySelectorAll(".tab-content").forEach((t, i) => t.classList.toggle("active", i === 0));
+    showScreen("login");
+    document.getElementById("login-user").focus();
+  }
+
+  /* ──────────────────────────────────────
+     INICIALIZAR APP (após login)
+     ────────────────────────────────────── */
+  function initApp() {
+    if (!currentUser) return;
+    document.getElementById("header-nome").textContent = currentUser.nome;
+    document.getElementById("header-role").textContent =
+      currentUser.role === "admin" ? "Admin" : "Usuário";
+
+    const n = new Date();
+    document.getElementById("f-data").value = n.toISOString().slice(0, 10);
+    document.getElementById("f-hora").value = n.toTimeString().slice(0, 5);
+    populateFormSelects();
+    renderStats();
+    updateClock();
+
+    // Se a aba admin estiver ativa, renderiza
+    if (document.getElementById("tab-admin").classList.contains("active")) {
+      renderUserTable();
+      renderLists();
+    }
+  }
+
+  /* ──────────────────────────────────────
+     HELPERS GERAIS
+     ────────────────────────────────────── */
+  function genId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+  function nowISO() { return new Date().toISOString(); }
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function formatDate(d) {
+    if (!d) return "";
+    const [y, m, dia] = d.split("-");
+    return `${dia}/${m}/${y}`;
+  }
+  function showAuthAlert(el, msg, tipo) {
+    el.textContent = msg;
+    el.className = "auth-alert " + tipo + " show";
+    setTimeout(() => el.classList.remove("show"), 4000);
+  }
+  function showAlert(id, msg, tipo) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.className = "alert alert-" + tipo + " show";
+    setTimeout(() => el.classList.remove("show"), 4000);
+  }
+
+  /* ──────────────────────────────────────
+     CLOCK
+     ────────────────────────────────────── */
+  function updateClock() {
+    document.getElementById("datetime").textContent =
+      new Date().toLocaleDateString("pt-BR") + "  " + new Date().toLocaleTimeString("pt-BR");
+  }
+  setInterval(updateClock, 1000);
+
+  /* ──────────────────────────────────────
+     TABS
+     ────────────────────────────────────── */
+  function switchTab(name, btn) {
+    document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById("tab-" + name).classList.add("active");
+    if (btn) btn.classList.add("active");
+    if (name === "consultar") { populateFiltros(); renderTabela(); renderStats(); }
+    if (name === "lancar")    { populateFormSelects(); }
+    if (name === "admin")     { renderUserTable(); renderLists(); }
+  }
+
+  /* ──────────────────────────────────────
+     DADOS DE AULAS
+     ────────────────────────────────────── */
+  function getAulas() {
+    try { return JSON.parse(localStorage.getItem(KEY_AULAS)) || []; }
+    catch { return []; }
+  }
+  function saveAulas(a) { localStorage.setItem(KEY_AULAS, JSON.stringify(a)); }
+
+  /* ──────────────────────────────────────
+     DADOS ADMIN (listas)
+     ────────────────────────────────────── */
+  function getAdm() {
+    try {
+      return JSON.parse(localStorage.getItem(KEY_ADM)) ||
+        { professores: [], turmas: [], jogos: [], jornadas: [] };
+    } catch { return { professores: [], turmas: [], jogos: [], jornadas: [] }; }
+  }
+  function saveAdm(a) { localStorage.setItem(KEY_ADM, JSON.stringify(a)); }
+
+  /* ──────────────────────────────────────
+     POPULATE SELECTS
+     ────────────────────────────────────── */
+  function populateSelect(id, lista, valorSel) {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const cur = valorSel !== undefined ? valorSel : sel.value;
+    sel.innerHTML = '<option value="">Selecione...</option>' +
+      lista.map(v => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(v)}</option>`).join("");
+  }
+
+  function populateFormSelects() {
+    const adm = getAdm();
+    populateSelect("f-professor", adm.professores);
+    populateSelect("f-turma", adm.turmas);
+    populateSelect("f-jogo", adm.jogos);
+    populateSelect("f-jornada", adm.jornadas);
+  }
+
+  function populateFiltros() {
+    const adm = getAdm();
+    const fill = (id, lista) => {
+      const sel = document.getElementById(id);
+      if (!sel) return;
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">Todos</option>' +
+        lista.map(v => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(v)}</option>`).join("");
+    };
+    fill("fil-professor", adm.professores);
+    fill("fil-turma", adm.turmas);
+    fill("fil-jogo", adm.jogos);
+    fill("fil-jornada", adm.jornadas);
+  }
+
+  function populateModalSelects(aula) {
+    const adm = getAdm();
+    populateSelect("edit-professor", adm.professores, aula.professor);
+    populateSelect("edit-turma", adm.turmas, aula.turma);
+    populateSelect("edit-jogo", adm.jogos, aula.jogo_aplicado);
+    populateSelect("edit-jornada", adm.jornadas, aula.jornada);
+  }
+
+  /* ──────────────────────────────────────
+     SALVAR AULA
+     ────────────────────────────────────── */
+  function salvarAula() {
+    const professor = document.getElementById("f-professor").value;
+    const turma = document.getElementById("f-turma").value;
+    const jornada = document.getElementById("f-jornada").value;
+    const jogo = document.getElementById("f-jogo").value;
+    const data = document.getElementById("f-data").value;
+    const hora = document.getElementById("f-hora").value;
+    const atividade = document.getElementById("f-atividade").value.trim();
+    const comentarios = document.getElementById("f-comentarios").value.trim();
+
+    if (!professor) return showAlert("alert-lancar", "Selecione o Professor.", "error");
+    if (!turma) return showAlert("alert-lancar", "Selecione a Turma.", "error");
+    if (!jornada) return showAlert("alert-lancar", "Selecione a Jornada do Conecta.", "error");
+    if (!jogo) return showAlert("alert-lancar", "Selecione o Jogo Aplicado.", "error");
+    if (!data) return showAlert("alert-lancar", "Preencha a Data.", "error");
+    if (!hora) return showAlert("alert-lancar", "Preencha a Hora.", "error");
+    if (!atividade) return showAlert("alert-lancar", "Preencha a Atividade Executada.", "error");
+
+    const aulas = getAulas();
+    aulas.push({
+      id: genId(), professor, turma, jornada,
+      jogo_aplicado: jogo, data, hora,
+      atividade_executada: atividade, comentarios,
+      created_at: nowISO(), updated_at: nowISO(),
+      criado_por: currentUser ? currentUser.id : null
+    });
+    saveAulas(aulas);
+    showAlert("alert-lancar", "✅ Lançamento salvo com sucesso!", "success");
+    limparForm();
+  }
+
+  function limparForm() {
+    ["f-professor", "f-turma", "f-jornada", "f-jogo"].forEach(id => document.getElementById(id).value = "");
+    ["f-atividade", "f-comentarios"].forEach(id => document.getElementById(id).value = "");
+    const n = new Date();
+    document.getElementById("f-data").value = n.toISOString().slice(0, 10);
+    document.getElementById("f-hora").value = n.toTimeString().slice(0, 5);
+  }
+
+  /* ──────────────────────────────────────
+     STATS
+     ────────────────────────────────────── */
+  function renderStats() {
+    const a = getAulas();
+    document.getElementById("stats-area").innerHTML = `
+      <div class="stat-card"><div class="num">${a.length}</div><div class="lbl">Total de aulas</div></div>
+      <div class="stat-card"><div class="num">${new Set(a.map(x => x.professor)).size}</div><div class="lbl">Professores</div></div>
+      <div class="stat-card"><div class="num">${new Set(a.map(x => x.turma)).size}</div><div class="lbl">Turmas</div></div>
+      <div class="stat-card"><div class="num">${new Set(a.map(x => x.jogo_aplicado)).size}</div><div class="lbl">Jogos distintos</div></div>
+      <div class="stat-card"><div class="num">${new Set(a.map(x => x.jornada)).size}</div><div class="lbl">Jornadas</div></div>
+    `;
+  }
+
+  /* ──────────────────────────────────────
+     TABELA (CONSULTAR)
+     ────────────────────────────────────── */
+  function limparFiltros() {
+    ["fil-professor", "fil-turma", "fil-jornada", "fil-jogo"].forEach(id => document.getElementById(id).value = "");
+    ["fil-data-ini", "fil-data-fim", "fil-texto"].forEach(id => document.getElementById(id).value = "");
+    renderTabela();
+  }
+
+  function renderTabela() {
+    const aulas = getAulas();
+    const prof = document.getElementById("fil-professor").value;
+    const turma = document.getElementById("fil-turma").value;
+    const jornada = document.getElementById("fil-jornada").value;
+    const jogo = document.getElementById("fil-jogo").value;
+    const dIni = document.getElementById("fil-data-ini").value;
+    const dFim = document.getElementById("fil-data-fim").value;
+    const txt = document.getElementById("fil-texto").value.toLowerCase();
+
+    const f = aulas.filter(a => {
+      if (prof && a.professor !== prof) return false;
+      if (turma && a.turma !== turma) return false;
+      if (jornada && a.jornada !== jornada) return false;
+      if (jogo && a.jogo_aplicado !== jogo) return false;
+      if (dIni && a.data < dIni) return false;
+      if (dFim && a.data > dFim) return false;
+      if (txt && !([a.atividade_executada, a.comentarios, a.professor,
+        a.turma, a.jornada, a.jogo_aplicado].join(" ").toLowerCase().includes(txt))) return false;
+      return true;
+    }).sort((a, b) => (b.data + b.hora) > (a.data + a.hora) ? 1 : -1);
+
+    const area = document.getElementById("tabela-area");
+    if (!f.length) {
+      area.innerHTML = `<div class="empty-state"><div style="font-size:2.5rem;">📭</div><p>Nenhum registro encontrado.</p></div>`;
+      return;
+    }
+
+    const admin = isAdmin();
+
+    area.innerHTML = `
+      <table>
+        <thead><tr>
+          <th>Data</th><th>Hora</th><th>Professor</th><th>Turma</th>
+          <th>Jornada</th><th>Jogo Aplicado</th><th>Atividade</th><th>Comentários</th><th>Ações</th>
+        </tr></thead>
+        <tbody>${f.map(a => {
+          // Botão de excluir: só admin vê
+          let btnExcluir = "";
+          if (admin) {
+            btnExcluir = `<button class="btn btn-danger btn-sm" onclick="excluirAula('${a.id}')">🗑️</button>`;
+          } else {
+            btnExcluir = `<span class="tooltip-wrap">
+              <button class="btn btn-danger btn-sm btn-disabled" disabled>🗑️</button>
+              <span class="tooltip-text">Apenas administradores</span>
+            </span>`;
+          }
+
+          return `
+          <tr>
+            <td>${formatDate(a.data)}</td>
+            <td>${a.hora}</td>
+            <td>${esc(a.professor)}</td>
+            <td>${esc(a.turma)}</td>
+            <td>${esc(a.jornada || "–")}</td>
+            <td>${esc(a.jogo_aplicado)}</td>
+            <td style="max-width:200px;">${esc(a.atividade_executada)}</td>
+            <td style="max-width:160px;">${esc(a.comentarios || "–")}</td>
+            <td><div class="td-actions">
+              <button class="btn btn-warning btn-sm" onclick="abrirEdicao('${a.id}')">✏️</button>
+              ${btnExcluir}
+            </div></td>
+          </tr>`;
+        }).join("")}
+        </tbody>
+      </table>
+      <p style="margin-top:10px;font-size:0.82rem;color:#999;">${f.length} registro(s) encontrado(s).</p>
+    `;
+  }
+
+  /* ──────────────────────────────────────
+     EDIÇÃO DE AULA
+     ────────────────────────────────────── */
+  function abrirEdicao(id) {
+    const aula = getAulas().find(a => a.id === id);
+    if (!aula) return;
+    document.getElementById("edit-id").value = id;
+    document.getElementById("edit-data").value = aula.data;
+    document.getElementById("edit-hora").value = aula.hora;
+    document.getElementById("edit-atividade").value = aula.atividade_executada;
+    document.getElementById("edit-comentarios").value = aula.comentarios || "";
+    populateModalSelects(aula);
+    document.getElementById("modal-overlay").classList.add("open");
+  }
+  function fecharModal() { document.getElementById("modal-overlay").classList.remove("open"); }
+
+  function salvarEdicao() {
+    const id = document.getElementById("edit-id").value;
+    const professor = document.getElementById("edit-professor").value;
+    const turma = document.getElementById("edit-turma").value;
+    const jornada = document.getElementById("edit-jornada").value;
+    const jogo = document.getElementById("edit-jogo").value;
+    const data = document.getElementById("edit-data").value;
+    const hora = document.getElementById("edit-hora").value;
+    const atividade = document.getElementById("edit-atividade").value.trim();
+    const comentarios = document.getElementById("edit-comentarios").value.trim();
+    if (!professor || !turma || !jornada || !jogo || !data || !hora || !atividade)
+      return alert("Preencha todos os campos obrigatórios (*).");
+    saveAulas(getAulas().map(a => a.id !== id ? a : {
+      ...a, professor, turma, jornada, jogo_aplicado: jogo,
+      data, hora, atividade_executada: atividade, comentarios, updated_at: nowISO()
+    }));
+    fecharModal();
+    populateFiltros();
+    renderTabela();
+    renderStats();
+  }
+
+  /* ──────────────────────────────────────
+     EXCLUIR AULA (SOMENTE ADMIN)
+     ────────────────────────────────────── */
+  function excluirAula(id) {
+    if (!isAdmin()) {
+      alert("Apenas administradores podem excluir lançamentos.");
+      return;
+    }
+    if (!confirm("Confirma excluir este lançamento?")) return;
+    saveAulas(getAulas().filter(a => a.id !== id));
+    renderTabela();
+    renderStats();
+  }
+
+  /* ──────────────────────────────────────
+     ADMINISTRAÇÃO – LISTAS
+     ────────────────────────────────────── */
+  const admMeta = {
+    professores: { listId: "list-professores", countId: "count-professores", alertId: "alert-adm-professores" },
+    turmas: { listId: "list-turmas", countId: "count-turmas", alertId: "alert-adm-turmas" },
+    jogos: { listId: "list-jogos", countId: "count-jogos", alertId: "alert-adm-jogos" },
+    jornadas: { listId: "list-jornadas", countId: "count-jornadas", alertId: "alert-adm-jornadas" },
+  };
+
+  function adicionarItem(campo, inputId) {
+    const input = document.getElementById(inputId);
+    const valor = input.value.trim();
+    const { alertId } = admMeta[campo];
+    if (!valor) return showAlert(alertId, "Digite um valor antes de adicionar.", "error");
+    const adm = getAdm();
+    if (adm[campo].includes(valor)) return showAlert(alertId, "Este item já está cadastrado.", "warning");
+    adm[campo].push(valor);
+    saveAdm(adm);
+    input.value = "";
+    renderLists();
+    populateFormSelects();
+    showAlert(alertId, `✅ "${valor}" adicionado!`, "success");
+  }
+
+  function removerItem(campo, valor) {
+    if (!confirm(`Remover "${valor}"? Lançamentos existentes não serão afetados.`)) return;
+    const adm = getAdm();
+    adm[campo] = adm[campo].filter(v => v !== valor);
+    saveAdm(adm);
+    renderLists();
+    populateFormSelects();
+  }
+
+  function renderLists() {
+    const adm = getAdm();
+    Object.entries(admMeta).forEach(([campo, meta]) => {
+      const lista = adm[campo];
+      document.getElementById(meta.countId).textContent = lista.length;
+      const el = document.getElementById(meta.listId);
+      if (!lista.length) {
+        el.innerHTML = `<div class="adm-empty"><div>📭</div>Nenhum item cadastrado.</div>`;
+        return;
+      }
+      el.innerHTML = lista.map(v => `
+        <div class="adm-item">
+          <span>${esc(v)}</span>
+          <button class="adm-item-del" onclick="removerItem('${campo}','${v.replace(/'/g, "\\'")}')" title="Remover">✕</button>
+        </div>`).join("");
+    });
+  }
+
+  // Enter nos inputs da administração
+  [
+    ["adm-professor-nome", "professores"],
+    ["adm-turma-nome", "turmas"],
+    ["adm-jogo-nome", "jogos"],
+    ["adm-jornada-nome", "jornadas"],
+  ].forEach(([inputId, campo]) => {
+    const el = document.getElementById(inputId);
+    if (el) el.addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); adicionarItem(campo, inputId); }
+    });
+  });
+
+  /* ──────────────────────────────────────
+     ADMINISTRAÇÃO – USUÁRIOS
+     ────────────────────────────────────── */
+  function renderUserTable() {
+    const section = document.getElementById("admin-users-section");
+    // Apenas admin vê esta seção
+    if (!isAdmin()) {
+      section.style.display = "none";
+      return;
+    }
+    section.style.display = "block";
+
+    const users = getUsers();
+    const tbody = document.getElementById("users-tbody");
+    const empty = document.getElementById("users-empty");
+
+    if (!users.length) {
+      tbody.innerHTML = "";
+      empty.style.display = "block";
+      return;
+    }
+    empty.style.display = "none";
+
+    tbody.innerHTML = users.map(u => {
+      // Determinar se é o próprio usuário logado
+      const isSelf = currentUser && currentUser.id === u.id;
+
+      // Botão de ativar/inativar
+      let btnToggle = "";
+      if (!isSelf) {
+        btnToggle = `<button class="btn btn-xs" style="background:#6c757d;color:#fff;" onclick="toggleUsuario('${u.id}')">${u.active ? '🔒 Inativar' : '🔓 Ativar'}</button>`;
+      } else {
+        btnToggle = `<span class="tooltip-wrap">
+          <button class="btn btn-xs btn-disabled" style="background:#6c757d;color:#fff;" disabled>🔒</button>
+          <span class="tooltip-text">Não pode alterar a si mesmo</span>
+        </span>`;
+      }
+
+      return `
+      <tr>
+        <td>${esc(u.nome)}${isSelf ? ' <span style="font-size:0.72rem;color:#1a73e8;">(você)</span>' : ''}</td>
+        <td><code>${esc(u.username)}</code></td>
+        <td><span class="badge ${u.role === 'admin' ? 'badge-admin' : 'badge-user'}">${u.role === 'admin' ? 'Admin' : 'Usuário'}</span></td>
+        <td><span class="badge ${u.active ? 'badge-active' : 'badge-inactive'}">${u.active ? 'Ativo' : 'Inativo'}</span></td>
+        <td><div class="td-actions">
+          <button class="btn btn-warning btn-xs" onclick="editarUsuario('${u.id}')">✏️</button>
+          ${btnToggle}
+        </div></td>
+      </tr>`;
+    }).join("");
+  }
+
+  function abrirModalUser(userId) {
+    const modal = document.getElementById("modal-user-overlay");
+    const title = document.getElementById("modal-user-title");
+    document.getElementById("alert-modal-user").classList.remove("show");
+
+    if (userId) {
+      // Edição
+      const user = getUsers().find(u => u.id === userId);
+      if (!user) return;
+      title.textContent = "✏️ Editar Usuário";
+      document.getElementById("user-edit-id").value = userId;
+      document.getElementById("user-nome").value = user.nome;
+      document.getElementById("user-username").value = user.username;
+      document.getElementById("user-role").value = user.role;
+      document.getElementById("user-senha").value = "";
+      document.getElementById("senha-optional").textContent = "(opcional – deixe vazio para não alterar)";
+    } else {
+      // Novo
+      title.textContent = "➕ Novo Usuário";
+      document.getElementById("user-edit-id").value = "";
+      document.getElementById("user-nome").value = "";
+      document.getElementById("user-username").value = "";
+      document.getElementById("user-role").value = "user";
+      document.getElementById("user-senha").value = "";
+      document.getElementById("senha-optional").textContent = "*";
+    }
+    modal.classList.add("open");
+  }
+
+  function fecharModalUser() {
+    document.getElementById("modal-user-overlay").classList.remove("open");
+  }
+
+  async function salvarUsuario() {
+    const alertEl = document.getElementById("alert-modal-user");
+    const editId = document.getElementById("user-edit-id").value;
+    const nome = document.getElementById("user-nome").value.trim();
+    const username = document.getElementById("user-username").value.trim();
+    const role = document.getElementById("user-role").value;
+    const senha = document.getElementById("user-senha").value;
+    const isEditing = !!editId;
+
+    if (!nome) return showAlert("alert-modal-user", "Preencha o nome completo.", "error");
+    if (!username || username.length < 3) return showAlert("alert-modal-user", "Usuário deve ter pelo menos 3 caracteres.", "error");
+    if (!isEditing && senha.length < 4) return showAlert("alert-modal-user", "Senha deve ter pelo menos 4 caracteres.", "error");
+    if (isEditing && senha && senha.length < 4) return showAlert("alert-modal-user", "Senha deve ter pelo menos 4 caracteres.", "error");
+
+    const users = getUsers();
+
+    // Verifica duplicidade de username
+    const dup = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.id !== editId);
+    if (dup) return showAlert("alert-modal-user", "Este nome de usuário já está em uso.", "error");
+
+    if (isEditing) {
+      // Edição
+      const idx = users.findIndex(u => u.id === editId);
+      if (idx === -1) return showAlert("alert-modal-user", "Usuário não encontrado.", "error");
+
+      // Se está rebaixando o último admin ativo de admin para user
+      if (users[idx].role === "admin" && role === "user" && users[idx].active) {
+        const activeAdmins = users.filter(u => u.role === "admin" && u.active && u.id !== editId);
+        if (activeAdmins.length === 0) {
+          return showAlert("alert-modal-user", "Não é possível rebaixar o último administrador ativo. Crie outro admin primeiro.", "error");
+        }
+      }
+
+      users[idx].nome = nome;
+      users[idx].username = username;
+      users[idx].role = role;
+
+      if (senha) {
+        users[idx].passwordHash = await hashPassword(senha);
+      }
+
+      // Se o admin editou a si mesmo, atualiza currentUser
+      if (currentUser && currentUser.id === editId) {
+        currentUser = { ...currentUser, nome, username, role };
+        document.getElementById("header-nome").textContent = nome;
+        document.getElementById("header-role").textContent = role === "admin" ? "Admin" : "Usuário";
+      }
+    } else {
+      // Novo usuário — permite criar quantos admins quiser
+      const hash = await hashPassword(senha);
+      users.push({
+        id: genId(),
+        nome, username, passwordHash: hash,
+        role, active: true,
+        created_at: nowISO()
+      });
+    }
+
+    saveUsers(users);
+    fecharModalUser();
+    renderUserTable();
+  }
+
+  function editarUsuario(id) {
+    abrirModalUser(id);
+  }
+
+  /* ──────────────────────────────────────
+     ATIVAR / INATIVAR USUÁRIO
+     (exclusão removida – apenas inativação)
+     ────────────────────────────────────── */
+  function toggleUsuario(id) {
+    // Não pode alterar a si mesmo
+    if (currentUser && currentUser.id === id) {
+      alert("Você não pode alterar o status do seu próprio usuário.");
+      return;
+    }
+
+    const users = getUsers();
+    const user = users.find(u => u.id === id);
+    if (!user) return;
+
+    // Se estiver tentando inativar o último admin ativo
+    if (user.role === "admin" && user.active) {
+      const activeAdmins = users.filter(u => u.role === "admin" && u.active && u.id !== id);
+      if (activeAdmins.length === 0) {
+        alert("Não é possível inativar o último administrador ativo. Crie outro admin primeiro.");
+        return;
+      }
+    }
+
+    user.active = !user.active;
+    saveUsers(users);
+    renderUserTable();
+  }
+
+  /* ──────────────────────────────────────
+     EXPORTAÇÃO CSV
+     ────────────────────────────────────── */
+  function exportarCSV() {
+    const aulas = getAulas();
+    if (!aulas.length) return alert("Nenhum dado para exportar.");
+    const headers = ["id", "professor", "turma", "jornada", "jogo_aplicado", "data", "hora", "atividade_executada", "comentarios", "created_at", "updated_at"];
+    const rows = [headers.join(";"),
+    ...aulas.map(a => headers.map(h => `"${(a[h] || "").toString().replace(/"/g, '""')}"`).join(";"))
+    ];
+    download("aulas_conecta.csv", rows.join("\n"), "text/csv;charset=utf-8;");
+  }
+
+  /* ──────────────────────────────────────
+     BACKUP JSON
+     ────────────────────────────────────── */
+  function exportarJSON() {
+    const payload = JSON.stringify({
+      versao: "3.1",
+      exportado_em: nowISO(),
+      aulas: getAulas(),
+      adm: getAdm(),
+      users: getUsers()
+    }, null, 2);
+    download("backup_conecta_aulas.json", payload, "application/json");
+  }
+
+  function importarJSON() {
+    const file = document.getElementById("import-file").files[0];
+    if (!file) return showAlert("alert-backup", "Selecione um arquivo .json.", "error");
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        const aulas = parsed.aulas || [];
+        const adm = parsed.adm || { professores: [], turmas: [], jogos: [], jornadas: [] };
+        const users = parsed.users || [];
+        if (!Array.isArray(aulas)) throw new Error();
+        const msg = `Restaurar ${aulas.length} lançamento(s), ${users.length} usuário(s) e cadastros?\n\nIsso substituirá todos os dados atuais.`;
+        if (!confirm(msg)) return;
+        saveAulas(aulas);
+        saveAdm(adm);
+        saveUsers(users);
+        showAlert("alert-backup", `✅ ${aulas.length} lançamento(s) e ${users.length} usuário(s) restaurados!`, "success");
+        document.getElementById("import-file").value = "";
+
+        // Se usuário atual foi sobrescrito, força logout
+        if (currentUser && !users.find(u => u.id === currentUser.id)) {
+          logout();
+        }
+      } catch {
+        showAlert("alert-backup", "❌ Arquivo inválido ou corrompido.", "error");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function confirmarLimpar() {
+    if (!isAdmin()) {
+      alert("Apenas administradores podem apagar todos os dados.");
+      return;
+    }
+    if (!confirm("⚠️ Apagar TODOS os dados permanentemente?")) return;
+    if (!confirm("Confirma? Esta ação não pode ser desfeita.")) return;
+    saveAulas([]);
+    saveAdm({ professores: [], turmas: [], jogos: [], jornadas: [] });
+    saveUsers([]);
+    showAlert("alert-backup", "Todos os dados foram apagados.", "warning");
+    logout();
+  }
+
+  /* ──────────────────────────────────────
+     DOWNLOAD HELPER
+     ────────────────────────────────────── */
+  function download(filename, content, mime) {
+    const blob = new Blob(["\uFEFF" + content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ──────────────────────────────────────
+     ENTER NO LOGIN
+     ────────────────────────────────────── */
+  document.addEventListener("DOMContentLoaded", () => {
+    ["login-senha"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("keydown", e => {
+        if (e.key === "Enter") { e.preventDefault(); fazerLogin(); }
+      });
+    });
+    ["setup-nome", "setup-user", "setup-senha", "setup-senha2"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("keydown", e => {
+        if (e.key === "Enter") e.preventDefault();
+      });
+    });
+    const lastSetup = document.getElementById("setup-senha2");
+    if (lastSetup) lastSetup.addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); criarAdmin(); }
+    });
+  });
+
+  /* ──────────────────────────────────────
+     START
+     ────────────────────────────────────── */
+  init();
+</script>
+</body>
+</html>
