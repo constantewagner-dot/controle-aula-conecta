@@ -1,6 +1,6 @@
 {
   "versao": "4.2",
-  "atualizado_em": "2026-09-15T19:13:31.521Z",
+  "atualizado_em": "2026-09-15T19:15:15.275Z",
   "aulas": [
     {
       "id": "abc123",
@@ -17,9 +17,12 @@
     }
   ],
   "adm": {
-    "professores": [],
+    "professores": [
+      "Jennyffer Vizzotto"
+    ],
     "turmas": [
-      "2ºA – Manhã"
+      "2ºA – Manhã",
+      "Educacional"
     ],
     "jogos": [
       "Dobble",
